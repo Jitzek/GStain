@@ -1,0 +1,36 @@
+.menu-bar {
+    -fx-background-color: #2B2B2B;
+    -fx-border-width: 2.0;
+}
+
+.menu-bar .label {
+    -fx-font-size: 14.0 pt;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-padding: 2.0px;
+}
+.menu-bar .menu-button:hover, .menu-bar .menu-button:focused, .menu-bar .menu-button:showing {
+    -fx-background: #3B3B3B;
+    -fx-text-fill: white;
+}
+
+.menu-item {
+    -fx-padding: 2.0px 20.0px 2.0px 10.0px;
+    -fx-text-fill: white;
+    -fx-background: #3B3B3B;
+}
+.menu-item .label{
+    -fx-font-size: 14.0 pt;
+    -fx-text-fill: white;
+}
+.menu-item .label:hover{
+    -fx-font-size: 14.0 pt;
+    -fx-background: black ;
+    -fx-text-fill: white;
+}
+.context-menu {
+    -fx-background-color:#2B2B2B;
+    -fx-border-width: 0.2px;
+    -fx-border-color: white;
+}
+

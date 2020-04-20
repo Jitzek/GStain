@@ -1,0 +1,50 @@
+.body {
+    -fx-background-color: #3D3D3D;
+}
+
+.main-menu {
+    -fx-background-color: #2B2B2B;
+}
+
+.separator *.line {
+    -fx-border-style: solid;
+    -fx-border-width: 0 0 1 0; /* its make really one-pixel-border */
+    -fx-border-color: black;
+}
+
+.editing-menu {
+    -fx-background-color: #2B2B2B;
+}
+
+.selected-element {
+    -fx-padding: 5 15 5 5;
+    -fx-text-fill: #afafaf;
+}
+
+.color-picker {
+    -fx-background-color: #2B2B2B;
+    -fx-background-radius: 0;
+    -fx-padding: 0;
+    -fx-color-label-visible: false;
+    -fx-color-rect-width: 18px;
+    -fx-color-rect-height: 18px;
+}
+
+.selection-menu {
+    -fx-background-color: #2B2B2B;
+}
+
+.CanvasArea {
+    -fx-background: #3B3B3B;
+    -fx-border-color: black;
+}
+
+.pointer-tool {
+}
+
+.tool-btn {
+    -fx-background-color: #2B2B2B;
+}
+.tool-btn:hover {
+    -fx-background-color: #3D3D3D;
+}
