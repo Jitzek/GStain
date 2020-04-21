@@ -10,15 +10,15 @@ public class CanvasElementCloneFactory {
     public static CanvasElement getClone(CanvasElement element) {
         switch (element.getClass().getSimpleName().toUpperCase()) {
             case "COMPOUND":
-                Compound compound = new Compound();
+                Compound compound = new Compound(element.getParent());
                 for (CanvasElement child : ((Compound) element).getChildren()) {
                     compound.addChild(CanvasElementCloneFactory.getClone(child));
                 }
                 return compound;
             case "RECTANGLE":
-                return new Rectangle(element.getX(), element.getY(), element.getColor(), element.getWidth(), element.getHeight());
+                return new Rectangle(element.getParent(), element.getX(), element.getY(), element.getColor(), element.getWidth(), element.getHeight());
             case "ELLIPSE":
-                return new Ellipse(element.getX(), element.getY(), element.getColor(), element.getWidth(), element.getHeight());
+                return new Ellipse(element.getParent(), element.getX(), element.getY(), element.getColor(), element.getWidth(), element.getHeight());
             case "TRIANGLE":
                 break;
         }

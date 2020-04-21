@@ -16,6 +16,7 @@ import main.commands.DragElementsCommand;
 import main.commands.DrawElementsCommand;
 import main.commands.RemoveElementsCommand;
 import main.commands.compoundCommands.ConvertToCompoundCommand;
+import main.commands.compoundCommands.ConvertToElementsCommand;
 import main.commands.shapeCommands.ellipseCommands.DrawEllipseCommand;
 import main.commands.shapeCommands.rectangleCommands.DrawRectangleCommand;
 import main.factories.CanvasElementCloneFactory;
@@ -192,18 +193,23 @@ public class Model {
 
     public void ungroupSelectedElements() {
         if (canvas.getSelectedCanvasElements().size() < 1) return;
+        ArrayList<Compound> compounds = new ArrayList<>();
+        for (CanvasElement element : canvas.getSelectedCanvasElements()) {
+            if (element instanceof Compound) compounds.add((Compound) element);
+        }
+        commandSender.execute(new ConvertToElementsCommand(canvas, compounds));
         // TODO
     }
 
     public void addRectangleToCanvas(double x, double y, Color color, double width, double height) {
-        Rectangle rectangle = (Rectangle) ShapeFactory.getShape("RECTANGLE", x, y, color, width, height);
+        Rectangle rectangle = (Rectangle) ShapeFactory.getShape(getCanvas(),"RECTANGLE", x, y, color, width, height);
         Command command = new DrawRectangleCommand(canvas, rectangle);
         commandSender.execute(command);
         handleElementSelection();
     }
 
     public void addEllipseToCanvas(double x, double y, Color color, double width, double height) {
-        Ellipse ellipse = (Ellipse) ShapeFactory.getShape("Ellipse", x, y, color, width, height);
+        Ellipse ellipse = (Ellipse) ShapeFactory.getShape(getCanvas(),"Ellipse", x, y, color, width, height);
         Command command = new DrawEllipseCommand(canvas, ellipse);
         commandSender.execute(command);
         handleElementSelection();

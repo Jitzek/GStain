@@ -2,12 +2,15 @@ package main.canvasElements.shapes;
 
 import javafx.scene.Node;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Path;
 import main.Canvas;
 import main.canvasElements.CanvasElement;
 
 import java.util.UUID;
 
-public abstract class Shape extends Node implements CanvasElement {
+public abstract class Shape implements CanvasElement {
+    private final Canvas parent;
+    private Path selectionStyle = null;
     private UUID uuid;
     private double x;
     private double y;
@@ -17,7 +20,8 @@ public abstract class Shape extends Node implements CanvasElement {
     private double height;
     private boolean selected = false;
 
-    public Shape(double x, double y, Color color, double width, double height) {
+    public Shape(Canvas parent, double x, double y, Color color, double width, double height) {
+        this.parent =parent;
         this.uuid = UUID.randomUUID();
         this.x = x;
         this.y = y;
@@ -25,6 +29,11 @@ public abstract class Shape extends Node implements CanvasElement {
         this.width = width;
         this.height = height;
         opacity = 1;
+    }
+
+    @Override
+    public Canvas getParent() {
+        return parent;
     }
 
     public UUID getUUID() {
@@ -100,5 +109,15 @@ public abstract class Shape extends Node implements CanvasElement {
     @Override
     public boolean isSelected() {
         return selected;
+    }
+
+    @Override
+    public void setSelectionStyle(Path selectionStyle) {
+        this.selectionStyle = selectionStyle;
+    }
+
+    @Override
+    public Path getSelectionStyle() {
+        return selectionStyle;
     }
 }

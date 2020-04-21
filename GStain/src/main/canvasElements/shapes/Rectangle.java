@@ -1,13 +1,14 @@
 package main.canvasElements.shapes;
 
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Path;
 import main.Canvas;
+import main.strategies.canvasElementStrategies.deselect.DeselectElementStrategy;
+import main.strategies.canvasElementStrategies.select.SelectRectangleStrategy;
 
 public class Rectangle extends Shape {
-    private boolean selected;
-
-    public Rectangle(double x, double y, Color color, double width, double height) {
-        super(x, y, color, width, height);
+    public Rectangle(Canvas parent, double x, double y, Color color, double width, double height) {
+        super(parent, x, y, color, width, height);
     }
 
     @Override
@@ -28,11 +29,11 @@ public class Rectangle extends Shape {
 
     @Override
     public void enableSelectionStyle(Canvas canvas) {
-
+        new SelectRectangleStrategy().select(canvas, this);
     }
 
     @Override
     public void disableSelectionStyle(Canvas canvas) {
-
+        new DeselectElementStrategy().deselect(canvas, this);
     }
 }
