@@ -1,11 +1,13 @@
 package main.canvasElements;
 
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Path;
 import main.Canvas;
 
 import java.util.UUID;
 
 public interface CanvasElement {
+    Canvas getParent();
     UUID getUUID();
     void setUUID(UUID uuid);
     double getX();
@@ -29,4 +31,6 @@ public interface CanvasElement {
     void show(Canvas canvas);
     void enableSelectionStyle(Canvas canvas);
     void disableSelectionStyle(Canvas canvas);
+    void setSelectionStyle(Path selectionStyle);
+    Path getSelectionStyle();
 }

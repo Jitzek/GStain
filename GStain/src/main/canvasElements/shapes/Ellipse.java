@@ -4,10 +4,8 @@ import javafx.scene.paint.Color;
 import main.Canvas;
 
 public class Ellipse extends Shape {
-    private boolean selected;
-
-    public Ellipse(double x, double y, Color color, double width, double height) {
-        super(x, y, color, width, height);
+    public Ellipse(Canvas parent, double x, double y, Color color, double width, double height) {
+        super(parent, x, y, color, width, height);
     }
 
     @Override

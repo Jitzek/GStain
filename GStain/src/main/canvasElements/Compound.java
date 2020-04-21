@@ -1,7 +1,7 @@
 package main.canvasElements;
 
 import javafx.scene.paint.Color;
-import main.CC;
+import javafx.scene.shape.Path;
 import main.Canvas;
 
 import java.util.ArrayList;
@@ -9,18 +9,27 @@ import java.util.Arrays;
 import java.util.UUID;
 
 public class Compound implements CanvasElement {
+    private final Canvas parent;
     private final ArrayList<CanvasElement> children;
     private UUID uuid;
     private boolean selected = false;
+    private Path selectionStyle = null;
 
-    public Compound() {
+    public Compound(Canvas parent) {
+        this.parent = parent;
         this.uuid = UUID.randomUUID();
         children = new ArrayList<>();
     }
 
-    public Compound(ArrayList<CanvasElement> canvasElements) {
+    public Compound(Canvas parent, ArrayList<CanvasElement> canvasElements) {
+        this.parent = parent;
         this.uuid = UUID.randomUUID();
         children = canvasElements;
+    }
+
+    @Override
+    public Canvas getParent() {
+        return parent;
     }
 
     @Override
@@ -243,5 +252,15 @@ public class Compound implements CanvasElement {
     @Override
     public void disableSelectionStyle(Canvas canvas) {
 
+    }
+
+    @Override
+    public void setSelectionStyle(Path selectionStyle) {
+        this.selectionStyle = selectionStyle;
+    }
+
+    @Override
+    public Path getSelectionStyle() {
+        return selectionStyle;
     }
 }
