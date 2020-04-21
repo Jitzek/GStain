@@ -35,6 +35,7 @@ public class SaveBeforeClosingDialog {
             }
 
             // Remove Canvas
+            CanvasParent.getChildren().remove(model.getCanvas());
             model.closeCanvas();
 
             alert.close();
