@@ -1,23 +1,21 @@
 package main.commands.compoundCommands;
 
 import main.Canvas;
-import main.CC;
 import main.canvasElements.CanvasElement;
 import main.canvasElements.Compound;
 import main.commands.Command;
-import main.factories.CanvasElementCloneFactory;
 import main.strategies.canvasElementStrategies.*;
 
-import java.lang.reflect.Array;
 import java.util.*;
 
 public class ConvertToCompoundCommand implements Command {
     private final Canvas canvas;
-    private final Compound compound = new Compound();
+    private final Compound compound;
     private int index = -1;
 
     public ConvertToCompoundCommand(Canvas canvas, ArrayList<CanvasElement> elements) {
         this.canvas = canvas;
+        compound = new Compound(canvas);
         for (CanvasElement ce : new ArrayList<>(elements)) {
             int i = canvas.getIndexOfElement(ce, false);
             compound.addChild(ce);

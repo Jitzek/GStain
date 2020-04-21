@@ -72,6 +72,9 @@ public class Controller {
 
             // CTRL+G
             else if (new KeyCodeCombination(KeyCode.G, KeyCombination.CONTROL_DOWN).match(event)) model.groupSelectedElements();
+
+            // CTRL+Shift+G
+            else if (new KeyCodeCombination(KeyCode.G, KeyCombination.CONTROL_DOWN, KeyCombination.SHIFT_DOWN).match(event)) model.ungroupSelectedElements();
         });
         scene.setOnKeyReleased(event -> model.removeActiveKey(event.getCode()));
     }
