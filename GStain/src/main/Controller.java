@@ -1,20 +1,23 @@
 package main;
 
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
+import main.canvasElements.shapes.Shape;
+import main.commands.canvasElementCommands.SetWidthOfElementsCommand;
 import main.dialogs.CanvasInitDialog;
 import main.dialogs.SaveBeforeClosingDialog;
 import main.tools.ToolType;
-import main.eventHandlers.MouseDraggedOnCanvasEventHandler;
-import main.eventHandlers.MousePressedOnCanvasEventHandler;
-import main.eventHandlers.MouseReleasedOnCanvasEventHandler;
 import main.models.Model;
 
 public class Controller {
@@ -30,21 +33,29 @@ public class Controller {
     ColorPicker FillColorPicker;
     @FXML
     ColorPicker BorderColorPicker;
+    @FXML
+    TextField Stroke;
+    @FXML
+    TextField ShapeWidth;
+    @FXML
+    TextField ShapeHeight;
 
     private Model model;
     private final StackPane CanvasHolder = new StackPane();
     private boolean canvasLoaded = false;
 
     public void init(Stage stage) {
-        model = new Model(stage, selectedElementLabel);
+        model = new Model(stage, selectedElementLabel, ShapeWidth, ShapeHeight);
 
         CanvasArea.setPrefSize(model.getScene().getWidth(), model.getScene().getWidth());
         CanvasArea.setStyle("-fx-background-color: #3B3B3B");
         configureSceneEventHandlers(model.getScene());
+        configureMiscEventHandlers();
     }
 
     /**
      * Configure event handlers for this window
+     *
      * @param scene Window to be configured
      */
     private void configureSceneEventHandlers(Scene scene) {
@@ -55,28 +66,51 @@ public class Controller {
             // Ctrl+Z
             if (new KeyCodeCombination(KeyCode.Z, KeyCombination.CONTROL_DOWN).match(event)) model.undoCommand();
 
-            // Ctrl+Shift+Z
-            else if (new KeyCodeCombination(KeyCode.Z, KeyCombination.CONTROL_DOWN, KeyCombination.SHIFT_DOWN).match(event)) model.redoCommand();
+                // Ctrl+Shift+Z
+            else if (new KeyCodeCombination(KeyCode.Z, KeyCombination.CONTROL_DOWN, KeyCombination.SHIFT_DOWN).match(event))
+                model.redoCommand();
 
-            // CTRL+C
-            else if (new KeyCodeCombination(KeyCode.C, KeyCombination.CONTROL_DOWN).match(event)) model.copySelectedElements();
+                // CTRL+C
+            else if (new KeyCodeCombination(KeyCode.C, KeyCombination.CONTROL_DOWN).match(event))
+                model.copySelectedElements();
 
-            // CTRL+X
-            else if (new KeyCodeCombination(KeyCode.X, KeyCombination.CONTROL_DOWN).match(event)) model.cutSelectedElements();
+                // CTRL+X
+            else if (new KeyCodeCombination(KeyCode.X, KeyCombination.CONTROL_DOWN).match(event))
+                model.cutSelectedElements();
 
-            //  CTRL+V
-            else if (new KeyCodeCombination(KeyCode.V, KeyCombination.CONTROL_DOWN).match(event)) model.pasteSelectedElements();
+                //  CTRL+V
+            else if (new KeyCodeCombination(KeyCode.V, KeyCombination.CONTROL_DOWN).match(event))
+                model.pasteSelectedElements();
 
-            // Backspace
+                // Backspace
             else if (model.isKeyActive(KeyCode.BACK_SPACE)) model.removeSelectedElementsFromCanvas();
 
-            // CTRL+G
-            else if (new KeyCodeCombination(KeyCode.G, KeyCombination.CONTROL_DOWN).match(event)) model.groupSelectedElements();
+                // CTRL+G
+            else if (new KeyCodeCombination(KeyCode.G, KeyCombination.CONTROL_DOWN).match(event))
+                model.groupSelectedElements();
 
-            // CTRL+Shift+G
-            else if (new KeyCodeCombination(KeyCode.G, KeyCombination.CONTROL_DOWN, KeyCombination.SHIFT_DOWN).match(event)) model.ungroupSelectedElements();
+                // CTRL+Shift+G
+            else if (new KeyCodeCombination(KeyCode.G, KeyCombination.CONTROL_DOWN, KeyCombination.SHIFT_DOWN).match(event))
+                model.ungroupSelectedElements();
         });
         scene.setOnKeyReleased(event -> model.removeActiveKey(event.getCode()));
+    }
+
+    private void configureMiscEventHandlers() {
+        ShapeWidth.focusedProperty().addListener((arg0, oldPropertyValue, newPropertyValue) -> {
+            if (!newPropertyValue) {
+                changeWidth();
+            }
+        });
+        ShapeWidth.setOnKeyPressed(keyEvent -> {
+            if (keyEvent.getCode() == KeyCode.ENTER) changeWidth();
+        });
+        ShapeHeight.focusedProperty().addListener((arg0, oldPropertyValue, newPropertyValue) -> {
+            if (!newPropertyValue) changeHeight();
+        });
+        ShapeHeight.setOnKeyPressed(keyEvent -> {
+            if (keyEvent.getCode() == KeyCode.ENTER) changeHeight();
+        });
     }
 
     public void handleCreateCanvas() {
@@ -109,19 +143,29 @@ public class Controller {
         model.getToolModel().setTool(ToolType.ELLIPSE);
     }
 
-    public void handleUndo() { model.undoCommand(); }
+    public void handleUndo() {
+        model.undoCommand();
+    }
 
     public void handleRedo() {
         model.redoCommand();
     }
 
-    public void handleCut() {  }
+    public void handleCut() {
+        model.cutSelectedElements();
+    }
 
-    public void handleCopy() { model.copySelectedElements(); }
+    public void handleCopy() {
+        model.copySelectedElements();
+    }
 
-    public void handlePaste() { model.pasteSelectedElements(); }
+    public void handlePaste() {
+        model.pasteSelectedElements();
+    }
 
-    public void handleRemove() { model.removeSelectedElementsFromCanvas(); }
+    public void handleRemove() {
+        model.removeSelectedElementsFromCanvas();
+    }
 
     public void handleGroup() {
         model.groupSelectedElements();
@@ -129,5 +173,36 @@ public class Controller {
 
     public void handleUngroup() {
         model.ungroupSelectedElements();
+    }
+
+    public void handleFillColorPicked() {
+        model.fillColorChanged(FillColorPicker.getValue());
+    }
+
+    public void handleBorderColorPicked() {
+        model.changeBorderColor(BorderColorPicker.getValue());
+    }
+
+    public void handleStrokeChange(KeyEvent event) {
+        if (!Stroke.getText().matches("[0-9.]+")) return;
+        model.changeBorderThickness(Double.parseDouble(Stroke.getText()));
+    }
+
+    public void handleWidthChange() {
+        if (!ShapeWidth.getText().matches("[0-9.]+")) return;
+        model.setLastShapeWidth(Double.parseDouble(ShapeWidth.getText()));
+    }
+
+    private void changeWidth() {
+        model.changeSelectedShapesWidth(model.getLastShapeWidth());
+    }
+
+    public void handleHeightChange() {
+        if (!ShapeHeight.getText().matches("[0-9.]+")) return;
+        model.setLastShapeHeight(Double.parseDouble(ShapeHeight.getText()));
+    }
+
+    private void changeHeight() {
+        model.changeSelectedShapesHeight(model.getLastShapeHeight());
     }
 }

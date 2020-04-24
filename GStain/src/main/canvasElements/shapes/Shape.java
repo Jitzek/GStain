@@ -1,10 +1,11 @@
 package main.canvasElements.shapes;
 
-import javafx.scene.Node;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Path;
 import main.Canvas;
 import main.canvasElements.CanvasElement;
+import main.strategies.canvasElementStrategies.deselect.DeselectElementStrategy;
+import main.strategies.canvasElementStrategies.select.SelectElementStrategy;
 
 import java.util.UUID;
 
@@ -88,22 +89,16 @@ public abstract class Shape implements CanvasElement {
         this.height = height;
     }
 
-    public void hide(Canvas canvas) {
-        canvas.getChildren().get(canvas.getIndexOfElement(this, true)).setOpacity(0.1);
-    }
-
-    public void show(Canvas canvas) {
-        canvas.getChildren().get(canvas.getIndexOfElement(this, true)).setOpacity(getElementOpacity());
-    }
-
     @Override
     public void select() {
         selected = true;
+        new SelectElementStrategy().select(getParent(), this);
     }
 
     @Override
     public void deselect() {
         selected = false;
+        new DeselectElementStrategy().deselect(getParent(), this);
     }
 
     @Override
@@ -119,5 +114,15 @@ public abstract class Shape implements CanvasElement {
     @Override
     public Path getSelectionStyle() {
         return selectionStyle;
+    }
+
+    @Override
+    public void decorate() {
+
+    }
+
+    @Override
+    public void position(double x, double y) {
+
     }
 }

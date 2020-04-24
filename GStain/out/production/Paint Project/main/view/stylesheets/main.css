@@ -30,6 +30,11 @@
     -fx-color-rect-height: 18px;
 }
 
+.stroke-label {
+    -fx-padding: 5 15 5 5;
+    -fx-text-fill: #ffffff;
+}
+
 .selection-menu {
     -fx-background-color: #2B2B2B;
 }

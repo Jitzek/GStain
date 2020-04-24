@@ -2,16 +2,9 @@ package main.eventHandlers;
 
 import javafx.event.EventHandler;
 import javafx.scene.input.MouseEvent;
-import main.commands.DragElementsCommand;
+import main.commands.canvasElementCommands.DragElementsCommand;
 import main.models.Model;
 import main.canvasElements.CanvasElement;
-import main.canvasElements.Compound;
-import main.strategies.canvasElementStrategies.DragCompoundStrategy;
-import main.strategies.canvasElementStrategies.DragElementsStrategy;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
 
 public class MouseDraggedOnCanvasEventHandler implements EventHandler<MouseEvent>, MouseOnCanvasEventHandler {
 
@@ -58,7 +51,7 @@ public class MouseDraggedOnCanvasEventHandler implements EventHandler<MouseEvent
 
         /* Configure real-time dragging */
         for (CanvasElement ce : model.getCanvas().getSelectedCanvasElements()) {
-            ce.hide(model.getCanvas());
+            ce.hide();
         }
         new DragElementsCommand(model.getCanvas(), model.getCanvas().getSelectedCanvasElements(), model.getToolModel().getMouseDragEndX() - model.getToolModel().getMouseDragContinuousX(), model.getToolModel().getMouseDragEndY() - model.getToolModel().getMouseDragContinuousY()).execute();
         model.getToolModel().setMouseDragContinuousX(model.getToolModel().getMouseDragEndX());

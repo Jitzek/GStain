@@ -1,14 +1,25 @@
 package main.canvasElements.shapes;
 
+import javafx.scene.Node;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Path;
 import main.Canvas;
-import main.strategies.canvasElementStrategies.deselect.DeselectElementStrategy;
-import main.strategies.canvasElementStrategies.select.SelectRectangleStrategy;
+import main.strategies.canvasElementStrategies.draw.DrawRectangleStrategy;
+import main.strategies.canvasElementStrategies.size.ResizeRectangleStrategy;
 
 public class Rectangle extends Shape {
+    private javafx.scene.shape.Rectangle rectangle;
+
     public Rectangle(Canvas parent, double x, double y, Color color, double width, double height) {
         super(parent, x, y, color, width, height);
+    }
+
+    public javafx.scene.shape.Rectangle getRectangle() {
+        return rectangle;
+    }
+
+    public void setRectangle(javafx.scene.shape.Rectangle rectangle) {
+        this.rectangle = rectangle;
     }
 
     @Override
@@ -28,12 +39,56 @@ public class Rectangle extends Shape {
     }
 
     @Override
-    public void enableSelectionStyle(Canvas canvas) {
-        new SelectRectangleStrategy().select(canvas, this);
+    public void recolor(Color color) {
+        setColor(color);
+        rectangle.setFill(color);
+    }
+
+    public void hide() {
+        getParent().getChildren().get(getParent().getChildren().indexOf(rectangle)).setOpacity(0.1);
+    }
+
+    public void show() {
+        getParent().getChildren().get(getParent().getChildren().indexOf(rectangle)).setOpacity(getElementOpacity());
     }
 
     @Override
-    public void disableSelectionStyle(Canvas canvas) {
-        new DeselectElementStrategy().deselect(canvas, this);
+    public void draw() {
+        new DrawRectangleStrategy().draw(getParent(), this);
+    }
+
+    @Override
+    public void remove() {
+        deselect();
+        getParent().getChildren().remove(rectangle);
+    }
+
+    @Override
+    public void drag(double x, double y) {
+        select();
+
+        setX(getX() + x);
+        setY(getY() + y);
+
+        getSelectionStyle().setTranslateX(getSelectionStyle().getTranslateX() + x);
+        getSelectionStyle().setTranslateY(getSelectionStyle().getTranslateY() + y);
+
+        rectangle.setTranslateX(rectangle.getTranslateX() + x);
+        rectangle.setTranslateY(rectangle.getTranslateY() + y);
+    }
+
+    @Override
+    public void resize(double width, double height) {
+        new ResizeRectangleStrategy().resize(getParent(), this, width, height);
+    }
+
+    @Override
+    public void resizeWidth(double width) {
+        new ResizeRectangleStrategy().resize(getParent(), this, width, getHeight());
+    }
+
+    @Override
+    public void resizeHeight(double height) {
+        new ResizeRectangleStrategy().resize(getParent(), this, getWidth(), height);
     }
 }
