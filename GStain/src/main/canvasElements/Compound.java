@@ -3,6 +3,10 @@ package main.canvasElements;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Path;
 import main.Canvas;
+import main.strategies.canvasElementStrategies.deselect.DeselectCompoundStrategy;
+import main.strategies.canvasElementStrategies.draw.DrawCompoundStrategy;
+import main.strategies.canvasElementStrategies.select.SelectCompoundStrategy;
+import main.strategies.canvasElementStrategies.size.ResizeCompoundStrategy;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -19,12 +23,16 @@ public class Compound implements CanvasElement {
         this.parent = parent;
         this.uuid = UUID.randomUUID();
         children = new ArrayList<>();
+        setWidth(-1);
+        setHeight(-1);
     }
 
     public Compound(Canvas parent, ArrayList<CanvasElement> canvasElements) {
         this.parent = parent;
         this.uuid = UUID.randomUUID();
         children = canvasElements;
+        setWidth(-1);
+        setHeight(-1);
     }
 
     @Override
@@ -66,7 +74,9 @@ public class Compound implements CanvasElement {
         children.removeAll(elements);
     }
 
-    public void removeChildAt(int index) { children.remove(index); }
+    public void removeChildAt(int index) {
+        children.remove(index);
+    }
 
     public CanvasElement selectChildAt(int index) {
         return children.get(index);
@@ -108,7 +118,7 @@ public class Compound implements CanvasElement {
         for (CanvasElement child : children) {
             if (child == element) return true;
             if (child instanceof Compound) {
-                if (((Compound) child).containsElement(element,true)) {
+                if (((Compound) child).containsElement(element, true)) {
                     return true;
                 }
             }
@@ -179,11 +189,13 @@ public class Compound implements CanvasElement {
     @Override
     public void select() {
         selected = true;
+        new SelectCompoundStrategy().select(parent, this);
     }
 
     @Override
     public void deselect() {
         selected = false;
+        new DeselectCompoundStrategy().deselect(parent, this);
     }
 
     @Override
@@ -207,16 +219,16 @@ public class Compound implements CanvasElement {
     }
 
     @Override
-    public void hide(Canvas canvas) {
+    public void hide() {
         for (CanvasElement child : children) {
-            child.hide(canvas);
+            child.hide();
         }
     }
 
     @Override
-    public void show(Canvas canvas) {
+    public void show() {
         for (CanvasElement child : children) {
-            child.show(canvas);
+            child.show();
         }
     }
 
@@ -245,16 +257,6 @@ public class Compound implements CanvasElement {
     }
 
     @Override
-    public void enableSelectionStyle(Canvas canvas) {
-
-    }
-
-    @Override
-    public void disableSelectionStyle(Canvas canvas) {
-
-    }
-
-    @Override
     public void setSelectionStyle(Path selectionStyle) {
         this.selectionStyle = selectionStyle;
     }
@@ -262,5 +264,56 @@ public class Compound implements CanvasElement {
     @Override
     public Path getSelectionStyle() {
         return selectionStyle;
+    }
+
+    @Override
+    public void recolor(Color color) {
+        for (CanvasElement element : children) {
+            element.recolor(color);
+        }
+    }
+
+    @Override
+    public void draw() {
+        new DrawCompoundStrategy().draw(getParent(), this);
+    }
+
+    @Override
+    public void remove() {
+        for (CanvasElement element : getChildren()) {
+            element.remove();
+        }
+    }
+
+    @Override
+    public void decorate() {
+
+    }
+
+    @Override
+    public void drag(double x, double y) {
+        for (CanvasElement ce : getChildren()) {
+            ce.drag(x, y);
+        }
+    }
+
+    @Override
+    public void resize(double width, double height) {
+        new ResizeCompoundStrategy().resize(getParent(), this, width, height);
+    }
+
+    @Override
+    public void resizeWidth(double width) {
+        new ResizeCompoundStrategy().resize(getParent(), this, width, -1);
+    }
+
+    @Override
+    public void resizeHeight(double height) {
+        new ResizeCompoundStrategy().resize(getParent(), this, -1, height);
+    }
+
+    @Override
+    public void position(double x, double y) {
+
     }
 }

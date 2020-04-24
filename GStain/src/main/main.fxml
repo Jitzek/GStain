@@ -14,6 +14,8 @@
 <?import javafx.scene.control.ColorPicker?>
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.chart.NumberAxis?>
+<?import javafx.scene.control.TextField?>
 <GridPane fx:controller="main.Controller" fx:id="MainWindow"
           xmlns:fx="src/main/main.fxml" styleClass="body">
     <!-- Main Menu -->
@@ -48,8 +50,13 @@
     <HBox GridPane.columnIndex="0" GridPane.rowIndex="1" styleClass="editing-menu">
         <Label fx:id="selectedElementLabel" minWidth="110" text="No Selection" styleClass="selected-element"
                alignment="BOTTOM_CENTER"/>
-        <ColorPicker fx:id="FillColorPicker"/>
-        <ColorPicker fx:id="BorderColorPicker"/>
+        <ColorPicker fx:id="FillColorPicker" onAction="#handleFillColorPicked"/>
+        <ColorPicker fx:id="BorderColorPicker" onAction="#handleBorderColorPicked"/>
+        <Label text="Stroke:" styleClass="stroke-label" />
+        <TextField onKeyTyped="#handleStrokeChange" fx:id="Stroke" prefWidth="80"  />
+        <Label fx:id="ShapeLabel" text="Shape:" styleClass="stroke-label" />
+        <TextField onKeyTyped="#handleWidthChange" fx:id="ShapeWidth" prefWidth="80"  />
+        <TextField onKeyTyped="#handleHeightChange" fx:id="ShapeHeight" prefWidth="80"  />
     </HBox>
     <!-- Main Element selection (side) bar -->
     <VBox GridPane.columnIndex="0" minWidth="100" GridPane.rowIndex="2" styleClass="selection-menu">

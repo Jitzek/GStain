@@ -91,6 +91,9 @@ public class MousePressedOnCanvasEventHandler implements EventHandler<MouseEvent
 
         model.getToolModel().setMouseDragContinuousX(model.getToolModel().getMouseDragStartX());
         model.getToolModel().setMouseDragContinuousY(model.getToolModel().getMouseDragStartY());
+
+        model.handleElementSelection();
+
     }
 
     @Override
@@ -99,9 +102,7 @@ public class MousePressedOnCanvasEventHandler implements EventHandler<MouseEvent
             Add Rectangle to Canvas
          */
 
-        // Get Data
-        Color color = Color.BLACK;
-        new RectangleDialog(model, mouseEvent.getX(), mouseEvent.getY(), color).showDialog();
+        new RectangleDialog(model, mouseEvent.getX(), mouseEvent.getY(), model.getSelectedFillColor()).showDialog();
         model.getCanvas().deselectAllElements();
     }
 
@@ -111,9 +112,7 @@ public class MousePressedOnCanvasEventHandler implements EventHandler<MouseEvent
             Add Ellipse to Canvas
          */
 
-        // Get Data
-        Color color = Color.BLACK;
-        new EllipseDialog(model, mouseEvent.getX(), mouseEvent.getY(), color).showDialog();
+        new EllipseDialog(model, mouseEvent.getX(), mouseEvent.getY(), model.getSelectedFillColor()).showDialog();
         model.getCanvas().deselectAllElements();
     }
 }

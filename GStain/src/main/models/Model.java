@@ -2,23 +2,18 @@ package main.models;
 
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import main.BorderStyle;
 import main.Canvas;
 import main.CommandSender;
 import main.canvasElements.CanvasElement;
 import main.canvasElements.Compound;
-import main.canvasElements.shapes.Ellipse;
-import main.canvasElements.shapes.Rectangle;
-import main.commands.Command;
-import main.commands.DragElementsCommand;
-import main.commands.DrawElementsCommand;
-import main.commands.RemoveElementsCommand;
-import main.commands.compoundCommands.ConvertToCompoundCommand;
-import main.commands.compoundCommands.ConvertToElementsCommand;
-import main.commands.shapeCommands.ellipseCommands.DrawEllipseCommand;
-import main.commands.shapeCommands.rectangleCommands.DrawRectangleCommand;
+import main.commands.canvasElementCommands.*;
+import main.commands.canvasElementCommands.compoundCommands.ConvertToCompoundCommand;
+import main.commands.canvasElementCommands.compoundCommands.ConvertToElementsCommand;
 import main.factories.CanvasElementCloneFactory;
 import main.factories.ShapeFactory;
 
@@ -32,14 +27,23 @@ public class Model {
     private CommandSender commandSender;
     private Canvas canvas;
     private final Stage stage;
+    private Color selectedFillColor = Color.BLACK;
+    private Color selectedBorderColor = Color.BLACK;
+    private double selectedBorderThickness = 0.0;
+    private double lastShapeWidth;
+    private double lastShapeHeight;
+    private final TextField ShapeWidth;
+    private final TextField ShapeHeight;
 
     private final Label selectedElementLabel;
 
-    public Model(Stage stage, Label selectedElementLabel) {
+    public Model(Stage stage, Label selectedElementLabel, TextField ShapeWidth, TextField ShapeHeight) {
         this.stage = stage;
         this.selectedElementLabel = selectedElementLabel;
         commandSender = new CommandSender();
         canvas = Canvas.getInstance();
+        this.ShapeWidth = ShapeWidth;
+        this.ShapeHeight = ShapeHeight;
     }
 
     public void closeCanvas() {
@@ -66,6 +70,20 @@ public class Model {
         return selectedElementLabel;
     }
 
+    public double getLastShapeWidth() {
+        return lastShapeWidth;
+    }
+    public void setLastShapeWidth(double lastShapeWidth) {
+        this.lastShapeWidth = lastShapeWidth;
+    }
+
+    public double getLastShapeHeight() {
+        return lastShapeHeight;
+    }
+    public void setLastShapeHeight(double lastShapeHeight) {
+        this.lastShapeHeight = lastShapeHeight;
+    }
+
     /**
      * Logic for the misc actions that (should) take place when an element has been selected
      */
@@ -80,6 +98,15 @@ public class Model {
         if (count > 1) selectedElementLabel.setText("Multiple Selections");
         else if (count < 1) selectedElementLabel.setText("No Selection");
         else selectedElementLabel.setText(canvas.getCanvasElementAt(index, false, false).getClass().getSimpleName());
+
+        // Display width and height of element
+        if (count == 1 && !(canvas.getCanvasElementAt(index, false, false) instanceof Compound)) {
+            ShapeWidth.setText(String.valueOf(canvas.getCanvasElementAt(index, false, false).getWidth()));
+            ShapeHeight.setText(String.valueOf(canvas.getCanvasElementAt(index, false, false).getHeight()));
+        } else {
+            ShapeWidth.setText("");
+            ShapeHeight.setText("");
+        }
     }
 
     /**
@@ -198,20 +225,17 @@ public class Model {
             if (element instanceof Compound) compounds.add((Compound) element);
         }
         commandSender.execute(new ConvertToElementsCommand(canvas, compounds));
-        // TODO
     }
 
     public void addRectangleToCanvas(double x, double y, Color color, double width, double height) {
-        Rectangle rectangle = (Rectangle) ShapeFactory.getShape(getCanvas(),"RECTANGLE", x, y, color, width, height);
-        Command command = new DrawRectangleCommand(canvas, rectangle);
-        commandSender.execute(command);
+        CanvasElement rectangle = ShapeFactory.getShape(getCanvas(),"RECTANGLE", x, y, color, width, height);
+        commandSender.execute(new DrawElementCommand(canvas, rectangle));
         handleElementSelection();
     }
 
     public void addEllipseToCanvas(double x, double y, Color color, double width, double height) {
-        Ellipse ellipse = (Ellipse) ShapeFactory.getShape(getCanvas(),"Ellipse", x, y, color, width, height);
-        Command command = new DrawEllipseCommand(canvas, ellipse);
-        commandSender.execute(command);
+        CanvasElement ellipse = ShapeFactory.getShape(getCanvas(),"Ellipse", x, y, color, width, height);
+        commandSender.execute(new DrawElementCommand(canvas, ellipse));
         handleElementSelection();
     }
 
@@ -224,5 +248,41 @@ public class Model {
      */
     public void removeSelectedElementsFromCanvas() {
         if (canvas.getSelectedCanvasElements().size() > 0) commandSender.execute(new RemoveElementsCommand(canvas, canvas.getSelectedCanvasElements()));
+    }
+
+    public void fillColorChanged(Color color) {
+        selectedFillColor = color;
+        if (canvas.getSelectedCanvasElements().size() < 1) return;
+        commandSender.execute(new ChangeFillColorOfElementsCommand(canvas.getSelectedCanvasElements(), color));
+    }
+    public Color getSelectedFillColor() {
+        return selectedFillColor;
+    }
+
+    public void changeSelectedShapesWidth(double width) {
+        // FIXME pressing on canvas will deselect element(s) before the width can be changed
+        commandSender.execute(new SetWidthOfElementsCommand(canvas.getSelectedCanvasElements(), width));
+        handleElementSelection();
+    }
+    public void changeSelectedShapesHeight(double height) {
+        // FIXME pressing on canvas will deselect element(s) before the height can be changed
+        commandSender.execute(new SetHeightOfElementsCommand(canvas.getSelectedCanvasElements(), height));
+        handleElementSelection();
+    }
+
+
+    public void changeBorderColor(Color color) {
+        //
+    }
+    public Color getSelectedBorderColor() {
+        return selectedBorderColor;
+    }
+
+    public void changeBorderThickness(double thickness) {
+        //
+    }
+
+    private void convertToBorderDecorator(CanvasElement element, BorderStyle borderStyle, double borderThickness, Color borderColor) {
+
     }
 }

@@ -2,14 +2,9 @@ package main.eventHandlers;
 
 import javafx.event.EventHandler;
 import javafx.scene.input.MouseEvent;
-import main.commands.DragElementsCommand;
+import main.commands.canvasElementCommands.DragElementsCommand;
 import main.models.Model;
 import main.canvasElements.CanvasElement;
-import main.canvasElements.Compound;
-import main.strategies.canvasElementStrategies.DragElementStrategy;
-import main.tools.ToolType;
-import main.commands.compoundCommands.DragCompoundCommand;
-import main.models.ToolModel;
 
 import java.util.ArrayList;
 
@@ -49,7 +44,7 @@ public class MouseReleasedOnCanvasEventHandler implements EventHandler<MouseEven
         ArrayList<CanvasElement> elements = new ArrayList<>();
         for (CanvasElement ce : model.getCanvas().getCanvasElements()) {
             if (ce.isSelected()) {
-                ce.show(model.getCanvas());
+                ce.show();
                 elements.add(ce);
             }
         }

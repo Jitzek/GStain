@@ -27,10 +27,17 @@ public interface CanvasElement {
     boolean isSelected();
     boolean insideBounds(double x, double y);
     boolean overlaps(double x, double y, double width, double height);
-    void hide(Canvas canvas);
-    void show(Canvas canvas);
-    void enableSelectionStyle(Canvas canvas);
-    void disableSelectionStyle(Canvas canvas);
+    void hide();
+    void show();
     void setSelectionStyle(Path selectionStyle);
     Path getSelectionStyle();
+    void recolor(Color color);
+    void draw();
+    void remove();
+    void drag(double x, double y);
+    void resize(double width, double height);
+    void resizeWidth(double width);
+    void resizeHeight(double height);
+    void position(double x, double y);
+    void decorate();
 }
