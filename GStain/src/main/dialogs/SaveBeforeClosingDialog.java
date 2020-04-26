@@ -1,8 +1,8 @@
 package main.dialogs;
 
+import javafx.event.Event;
 import javafx.scene.control.*;
 import javafx.scene.layout.Pane;
-import javafx.util.Pair;
 import main.models.Model;
 
 public class SaveBeforeClosingDialog {
@@ -35,13 +35,15 @@ public class SaveBeforeClosingDialog {
             }
 
             // Remove Canvas
-            CanvasParent.getChildren().remove(model.getCanvas());
             model.closeCanvas();
 
             alert.close();
             if (promptNew) {
                 // Create new Canvas
                 new CanvasInitDialog(model, CanvasParent).showDialog();
+            }
+            else {
+                model.getStage().close();
             }
         });
     }

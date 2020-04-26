@@ -1,9 +1,6 @@
 package main;
 
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -13,12 +10,13 @@ import javafx.scene.input.KeyCombination;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
-import main.canvasElements.shapes.Shape;
-import main.commands.canvasElementCommands.SetWidthOfElementsCommand;
+import javafx.stage.WindowEvent;
 import main.dialogs.CanvasInitDialog;
 import main.dialogs.SaveBeforeClosingDialog;
 import main.tools.ToolType;
 import main.models.Model;
+
+import java.util.Optional;
 
 public class Controller {
     @FXML
@@ -39,18 +37,31 @@ public class Controller {
     TextField ShapeWidth;
     @FXML
     TextField ShapeHeight;
+    @FXML
+    StackPane CanvasHolder;
 
     private Model model;
-    private final StackPane CanvasHolder = new StackPane();
     private boolean canvasLoaded = false;
 
     public void init(Stage stage) {
-        model = new Model(stage, selectedElementLabel, ShapeWidth, ShapeHeight);
+        model = new Model(stage, CanvasHolder, selectedElementLabel, ShapeWidth, ShapeHeight);
 
         CanvasArea.setPrefSize(model.getScene().getWidth(), model.getScene().getWidth());
         CanvasArea.setStyle("-fx-background-color: #3B3B3B");
+        configureStageEventHandlers(model.getStage());
         configureSceneEventHandlers(model.getScene());
         configureMiscEventHandlers();
+    }
+
+    private void configureStageEventHandlers(Stage stage) {
+        stage.getScene().getWindow().addEventFilter(WindowEvent.WINDOW_CLOSE_REQUEST, this::closeWindowEvent);
+    }
+
+    private void closeWindowEvent(WindowEvent event) {
+        if (model.unsavedChanges()) {
+            event.consume();
+            new SaveBeforeClosingDialog(model, CanvasHolder).showDialog(false);
+        }
     }
 
     /**
@@ -114,12 +125,11 @@ public class Controller {
     }
 
     public void handleCreateCanvas() {
-        // Create Canvas Container
-        CanvasArea.setContent(CanvasHolder);
-
         if (canvasLoaded) {
             // Handle closing and creating canvas
-            new SaveBeforeClosingDialog(model, CanvasHolder).showDialog(true);
+            if (model.unsavedChanges()) {
+                new SaveBeforeClosingDialog(model, CanvasHolder).showDialog(true);
+            }
             return;
         }
 

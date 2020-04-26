@@ -1,4 +1,3 @@
-<?import javafx.geometry.Insets?>
 <?import javafx.scene.layout.GridPane?>
 
 <?import javafx.scene.control.Button?>
@@ -14,8 +13,8 @@
 <?import javafx.scene.control.ColorPicker?>
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.ScrollPane?>
-<?import javafx.scene.chart.NumberAxis?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.StackPane?>
 <GridPane fx:controller="main.Controller" fx:id="MainWindow"
           xmlns:fx="src/main/main.fxml" styleClass="body">
     <!-- Main Menu -->
@@ -54,7 +53,7 @@
         <ColorPicker fx:id="BorderColorPicker" onAction="#handleBorderColorPicked"/>
         <Label text="Stroke:" styleClass="stroke-label" />
         <TextField onKeyTyped="#handleStrokeChange" fx:id="Stroke" prefWidth="80"  />
-        <Label fx:id="ShapeLabel" text="Shape:" styleClass="stroke-label" />
+        <Label text="Shape:" styleClass="stroke-label" />
         <TextField onKeyTyped="#handleWidthChange" fx:id="ShapeWidth" prefWidth="80"  />
         <TextField onKeyTyped="#handleHeightChange" fx:id="ShapeHeight" prefWidth="80"  />
     </HBox>
@@ -88,6 +87,7 @@
         <ScrollPane fx:id="CanvasArea" HBox.hgrow="ALWAYS" hbarPolicy="ALWAYS" vbarPolicy="ALWAYS" fitToHeight="true"
                     fitToWidth="true"
                     styleClass="CanvasArea">
+            <StackPane fx:id="CanvasHolder" />
         </ScrollPane>
     </HBox>
     <HBox GridPane.columnIndex="0" GridPane.rowIndex="3" fx:id="MonitorArea" styleClass="monitor-text" >
