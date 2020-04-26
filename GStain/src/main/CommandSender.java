@@ -14,6 +14,10 @@ public class CommandSender {
         commands = new ArrayList<>();
     }
 
+    public ArrayList<Command> getCommands() {
+        return commands;
+    }
+
     /**
      * Cleans List before pointer reset to remove unreachable commands
      */

@@ -87,54 +87,13 @@ public class CanvasInitDialog {
             if (dialogButton == confirmBtnType) {
                 if (!titleField.getText().matches("[A-Za-z0-9_ÄäËëÖöÏïÜüÿÂâÊêÔôÎîÛûÁáÉéÓóÍíÚúÝýÀàÈèÒòÌìÙù!@#$^&()+={} ]+") || !widthField.getText().matches("[0-9]+") || !heightField.getText().matches("[0-9]+")) return null;
 
-                // Define Canvas
-                Canvas canvas = model.getCanvas();
+                model.createCanvas(titleField.getText(), Double.parseDouble(widthField.getText()), Double.parseDouble(heightField.getText()));
 
-                // Configure Canvas
-                canvas.setName(titleField.getText());
-                model.setStageTitle(canvas.getName());
-                configureCanvasEventHandlers(canvas, model);
-                parent.getChildren().add(canvas);
-
-                // Define size of Canvas
-                canvas.setMinSize(Double.parseDouble(widthField.getText()), Double.parseDouble(heightField.getText()));
-                canvas.setMaxSize(Double.parseDouble(widthField.getText()), Double.parseDouble(heightField.getText()));
-
-                // Canvas Styling
-                canvas.setStyle("-fx-background-color: #ffffff");
-
-                model.getToolModel().setTool(ToolType.POINTER);
                 dialog.close();
             }
             return null;
         });
 
         dialog.showAndWait();
-    }
-
-    private void configureCanvasEventHandlers(Canvas canvas, Model model) {
-        /*
-            SELECTION RULES:
-
-            Selection is based on hierarchy, first element in group has priority
-
-            When shift is being hold
-                - Elements which are selected and clicked on will be deselected
-                - Elements which are selected and NOT clicked on will stay selected
-
-            When shift is NOT being hold:
-                - All elements which are not clicked on will be deselected
-        */
-        // Handle Mouse Pressed Event
-        MousePressedOnCanvasEventHandler mousePressedOnCanvasEventHandler = new MousePressedOnCanvasEventHandler(model);
-        canvas.setOnMousePressed(mousePressedOnCanvasEventHandler);
-
-        // Handle Mouse Dragged Event
-        MouseDraggedOnCanvasEventHandler mouseDraggedOnCanvasEventHandler = new MouseDraggedOnCanvasEventHandler(model);
-        canvas.setOnMouseDragged(mouseDraggedOnCanvasEventHandler);
-
-        // Handle Mouse Released Event
-        MouseReleasedOnCanvasEventHandler mouseReleasedOnCanvasEventHandler = new MouseReleasedOnCanvasEventHandler(model);
-        canvas.setOnMouseReleased(mouseReleasedOnCanvasEventHandler);
     }
 }

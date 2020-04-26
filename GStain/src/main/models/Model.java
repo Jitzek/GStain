@@ -4,6 +4,8 @@ import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import main.BorderStyle;
@@ -14,18 +16,23 @@ import main.canvasElements.Compound;
 import main.commands.canvasElementCommands.*;
 import main.commands.canvasElementCommands.compoundCommands.ConvertToCompoundCommand;
 import main.commands.canvasElementCommands.compoundCommands.ConvertToElementsCommand;
+import main.eventHandlers.MouseDraggedOnCanvasEventHandler;
+import main.eventHandlers.MousePressedOnCanvasEventHandler;
+import main.eventHandlers.MouseReleasedOnCanvasEventHandler;
 import main.factories.CanvasElementCloneFactory;
 import main.factories.ShapeFactory;
+import main.tools.ToolType;
 
 import java.util.ArrayList;
 import java.util.Collections;
 
 public class Model {
+    private Canvas canvas;
+    private StackPane canvasHolder;
     private final ArrayList<CanvasElement> copiedElements = new ArrayList<>();
     private final ArrayList<KeyCode> activeKeys = new ArrayList<>();
     private final ToolModel toolModel = new ToolModel();
     private CommandSender commandSender;
-    private Canvas canvas;
     private final Stage stage;
     private Color selectedFillColor = Color.BLACK;
     private Color selectedBorderColor = Color.BLACK;
@@ -37,8 +44,9 @@ public class Model {
 
     private final Label selectedElementLabel;
 
-    public Model(Stage stage, Label selectedElementLabel, TextField ShapeWidth, TextField ShapeHeight) {
+    public Model(Stage stage, StackPane canvasHolder, Label selectedElementLabel, TextField ShapeWidth, TextField ShapeHeight) {
         this.stage = stage;
+        this.canvasHolder = canvasHolder;
         this.selectedElementLabel = selectedElementLabel;
         commandSender = new CommandSender();
         canvas = Canvas.getInstance();
@@ -46,7 +54,56 @@ public class Model {
         this.ShapeHeight = ShapeHeight;
     }
 
+    public void createCanvas(String title, double width, double height) {
+        // Define Canvas
+        Canvas canvas = getCanvas();
+
+        // Configure Canvas
+        canvas.setName(title);
+        setStageTitle(canvas.getName());
+        configureCanvasEventHandlers(canvas, this);
+        canvasHolder.getChildren().add(canvas);
+
+        // Define size of Canvas
+        canvas.setMinSize(width, height);
+        canvas.setMaxSize(width, height);
+
+        // Canvas Styling
+        canvas.setStyle("-fx-background-color: #ffffff");
+
+        getToolModel().setTool(ToolType.POINTER);
+    }
+
+    private void configureCanvasEventHandlers(Canvas canvas, Model model) {
+        /*
+            SELECTION RULES:
+
+            Selection is based on hierarchy, first element in group has priority
+
+            When shift is being hold
+                - Elements which are selected and clicked on will be deselected
+                - Elements which are selected and NOT clicked on will stay selected
+
+            When shift is NOT being hold:
+                - All elements which are not clicked on will be deselected
+        */
+        // Handle Mouse Pressed Event
+        MousePressedOnCanvasEventHandler mousePressedOnCanvasEventHandler = new MousePressedOnCanvasEventHandler(model);
+        canvas.setOnMousePressed(mousePressedOnCanvasEventHandler);
+
+        // Handle Mouse Dragged Event
+        MouseDraggedOnCanvasEventHandler mouseDraggedOnCanvasEventHandler = new MouseDraggedOnCanvasEventHandler(model);
+        canvas.setOnMouseDragged(mouseDraggedOnCanvasEventHandler);
+
+        // Handle Mouse Released Event
+        MouseReleasedOnCanvasEventHandler mouseReleasedOnCanvasEventHandler = new MouseReleasedOnCanvasEventHandler(model);
+        canvas.setOnMouseReleased(mouseReleasedOnCanvasEventHandler);
+    }
+
     public void closeCanvas() {
+        // Remove GUI element
+        canvasHolder.getChildren().remove(canvas);
+
         // Flush commands
         commandSender = new CommandSender();
 
@@ -284,5 +341,9 @@ public class Model {
 
     private void convertToBorderDecorator(CanvasElement element, BorderStyle borderStyle, double borderThickness, Color borderColor) {
 
+    }
+
+    public boolean unsavedChanges() {
+        return commandSender.getCommands().size() > 0;
     }
 }
