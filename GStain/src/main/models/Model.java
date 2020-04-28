@@ -21,8 +21,13 @@ import main.eventHandlers.MousePressedOnCanvasEventHandler;
 import main.eventHandlers.MouseReleasedOnCanvasEventHandler;
 import main.factories.CanvasElementCloneFactory;
 import main.factories.ShapeFactory;
+import main.fileio.Export;
+import main.fileio.Import;
 import main.tools.ToolType;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -345,5 +350,40 @@ public class Model {
 
     public boolean unsavedChanges() {
         return commandSender.getCommands().size() > 0;
+    }
+
+    public void importGurbe(StackPane stackPane){
+        new Import(canvas, stage, this);
+        printHierarchy();
+    }
+
+    /**
+     * exports the current project to a .gurbe file
+     */
+    public void export() {
+        Export exportVisitor = new Export();
+        System.out.println(exportVisitor.export(canvas.getCanvasElements(), canvas));
+        File file = new File("file.gurbe");
+        try{
+            if(file.createNewFile()){
+                System.out.println("File created");
+            }
+            else{
+                System.out.println("File already exists");
+            }
+        }
+        catch (IOException e){
+            System.out.println("An error occurred");
+            e.printStackTrace();
+        }
+        try{
+            FileWriter fileWriter = new FileWriter("file.gurbe");
+            fileWriter.write(exportVisitor.export(canvas.getCanvasElements(), canvas));
+            fileWriter.close();
+        }
+        catch(IOException e){
+            System.out.println("An error occurred");
+            e.printStackTrace();
+        }
     }
 }

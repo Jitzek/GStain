@@ -6,6 +6,7 @@ import javafx.scene.shape.Path;
 import main.Canvas;
 import main.strategies.canvasElementStrategies.draw.DrawRectangleStrategy;
 import main.strategies.canvasElementStrategies.size.ResizeRectangleStrategy;
+import main.visitor.CanvasElementVisitor;
 
 public class Rectangle extends Shape {
     private javafx.scene.shape.Rectangle rectangle;
@@ -90,5 +91,9 @@ public class Rectangle extends Shape {
     @Override
     public void resizeHeight(double height) {
         new ResizeRectangleStrategy().resize(getParent(), this, getWidth(), height);
+    }
+    @Override
+    public String accept(CanvasElementVisitor visitor){
+        return visitor.visitRectangle(this);
     }
 }
