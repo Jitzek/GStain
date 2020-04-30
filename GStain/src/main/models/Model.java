@@ -7,6 +7,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import main.BorderStyle;
 import main.Canvas;
@@ -383,6 +384,23 @@ public class Model {
         }
         catch(IOException e){
             System.out.println("An error occurred");
+            e.printStackTrace();
+        }
+    }
+    public void exportAs(){
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Save as");
+        fileChooser.setInitialFileName("Default");
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("gurbe Files", "*.gurbe"));
+        try {
+            File file = fileChooser.showSaveDialog(stage);
+            if(file != null){
+                Export exportVisitor = new Export();
+                FileWriter fileWriter = new FileWriter(file);
+                fileWriter.write(exportVisitor.export(canvas.getCanvasElements(), canvas));
+                fileWriter.close();
+            }
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }

@@ -148,6 +148,9 @@ public class Controller {
     public void handleSave(){
         model.export();
     }
+    public void handleSaveAs() {
+        model.exportAs();
+    }
 
     public void handlePointerToolSelect() {
         model.getToolModel().setTool(ToolType.POINTER);

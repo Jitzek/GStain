@@ -27,7 +27,7 @@
                 <MenuItem onAction="#handleCreateCanvas" text="_New..."/>
                 <MenuItem onAction="#handleOpen" text="_Open..."/>
                 <MenuItem onAction="#handleSave" mnemonicParsing="false" text="Save"/>
-                <MenuItem mnemonicParsing="false" text="Save As..."/>
+                <MenuItem onAction="#handleSaveAs" mnemonicParsing="false" text="Save As..."/>
                 <MenuItem mnemonicParsing="false" text="Exit"/>
             </Menu>
             <Menu text="Edit">

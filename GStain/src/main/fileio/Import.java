@@ -34,6 +34,9 @@ public class Import {
         double cheigth = Double.parseDouble(getInfo(c)[3]);
         model.createCanvas(filename, cwidth, cheigth);
         traverseGroup(canvas.getCanvasElements());
+        for(CanvasElement canvasElement : canvas.getCanvasElements()){
+            canvasElement.draw();
+        }
     }
     private void traverseGroup(ArrayList<CanvasElement> canvasElements){
         int total = Integer.parseInt(getInfo(indexer.get(currentline))[1]);

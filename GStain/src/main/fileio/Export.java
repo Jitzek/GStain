@@ -62,14 +62,18 @@ public class Export implements CanvasElementVisitor {
      * @param group group with the needed elements
      * @return string with all info from the group that will be put in the file
      */
-    //FIXME: fix extra \n after group ended
-    public String _visitGroup(Compound group){
+    private String _visitGroup(Compound group){
         StringBuilder stringBuilder = new StringBuilder();
         deepness++;
+        int i = 0;
         for(CanvasElement shape : group.getChildren()){
             String obj = shape.accept(this);
-            obj = weNeedToGoDeeper(deepness) + obj.replace("\n", "\n") + "\n";
-
+            //check if last iteration of loop
+            if(++i == group.getChildren().size()){
+            obj = weNeedToGoDeeper(deepness) + obj;
+            }else{
+            obj = weNeedToGoDeeper(deepness) + obj + "\n";
+            }
             stringBuilder.append(obj);
         }
         deepness--;
