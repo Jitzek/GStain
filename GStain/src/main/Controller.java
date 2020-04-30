@@ -141,6 +141,17 @@ public class Controller {
         canvasLoaded = true;
     }
 
+    public void handleOpen(){
+        model.importGurbe(CanvasHolder);
+    }
+
+    public void handleSave(){
+        model.export();
+    }
+    public void handleSaveAs() {
+        model.exportAs();
+    }
+
     public void handlePointerToolSelect() {
         model.getToolModel().setTool(ToolType.POINTER);
     }

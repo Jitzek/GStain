@@ -5,6 +5,7 @@ import javafx.scene.shape.Path;
 import main.Canvas;
 import main.strategies.canvasElementStrategies.draw.DrawEllipseStrategy;
 import main.strategies.canvasElementStrategies.size.ResizeEllipseStrategy;
+import main.visitor.CanvasElementVisitor;
 
 public class Ellipse extends Shape {
     private javafx.scene.shape.Ellipse ellipse;
@@ -90,5 +91,9 @@ public class Ellipse extends Shape {
     @Override
     public void resizeHeight(double height) {
         new ResizeEllipseStrategy().resize(getParent(), this, getWidth(), height);
+    }
+    @Override
+    public String accept(CanvasElementVisitor visitor){
+        return visitor.visitCircle(this);
     }
 }

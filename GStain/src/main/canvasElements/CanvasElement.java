@@ -3,6 +3,7 @@ package main.canvasElements;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Path;
 import main.Canvas;
+import main.visitor.CanvasElementVisitor;
 
 import java.util.UUID;
 
@@ -40,4 +41,5 @@ public interface CanvasElement {
     void resizeHeight(double height);
     void position(double x, double y);
     void decorate();
+    String accept(CanvasElementVisitor canvasElementVisitor);
 }

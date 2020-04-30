@@ -7,6 +7,7 @@ import main.strategies.canvasElementStrategies.deselect.DeselectCompoundStrategy
 import main.strategies.canvasElementStrategies.draw.DrawCompoundStrategy;
 import main.strategies.canvasElementStrategies.select.SelectCompoundStrategy;
 import main.strategies.canvasElementStrategies.size.ResizeCompoundStrategy;
+import main.visitor.CanvasElementVisitor;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -315,5 +316,9 @@ public class Compound implements CanvasElement {
     @Override
     public void position(double x, double y) {
 
+    }
+    @Override
+    public String accept(CanvasElementVisitor visitor){
+        return visitor.visitGroup(this);
     }
 }
