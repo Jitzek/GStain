@@ -14,6 +14,7 @@ import main.Canvas;
 import main.CommandSender;
 import main.canvasElements.CanvasElement;
 import main.canvasElements.Compound;
+import main.canvasElements.SelectionBox;
 import main.commands.canvasElementCommands.*;
 import main.commands.canvasElementCommands.compoundCommands.ConvertToCompoundCommand;
 import main.commands.canvasElementCommands.compoundCommands.ConvertToElementsCommand;
@@ -34,6 +35,7 @@ import java.util.Collections;
 
 public class Model {
     private Canvas canvas;
+    private SelectionBox selectionBox;
     private StackPane canvasHolder;
     private final ArrayList<CanvasElement> copiedElements = new ArrayList<>();
     private final ArrayList<KeyCode> activeKeys = new ArrayList<>();
@@ -78,6 +80,11 @@ public class Model {
         canvas.setStyle("-fx-background-color: #ffffff");
 
         getToolModel().setTool(ToolType.POINTER);
+    }
+
+    public void createSelectionBox(){
+        SelectionBox selectionBox = getSelectionBox();
+        canvas.getChildren().add(selectionBox.getPath());
     }
 
     private void configureCanvasEventHandlers(Canvas canvas, Model model) {
@@ -403,5 +410,13 @@ public class Model {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public SelectionBox getSelectionBox() {
+        return SelectionBox.getSelectionBox();
+    }
+
+    public void setSelectionBox(SelectionBox selectionBox) {
+        this.selectionBox = selectionBox;
     }
 }

@@ -43,7 +43,13 @@ public class MouseDraggedOnCanvasEventHandler implements EventHandler<MouseEvent
                 }
             }
         }
-        if (!model.getToolModel().hasLegalDragPivot()) return;
+        if (!model.getToolModel().hasLegalDragPivot()){
+            //on every drag update set endpoint x,y of the selectionbox
+            model.getSelectionBox().setEx(mouseEvent.getX());
+            model.getSelectionBox().setEy(mouseEvent.getY());
+            model.getSelectionBox().draw();
+            return;
+        }
 
         model.getToolModel().isDragging(true);
         model.getToolModel().setMouseDragEndX(mouseEvent.getX());

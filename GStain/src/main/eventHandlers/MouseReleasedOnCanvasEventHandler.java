@@ -38,6 +38,12 @@ public class MouseReleasedOnCanvasEventHandler implements EventHandler<MouseEven
 
         // Prevent unnecessary commands
         if (!model.getToolModel().isDragging()) {
+            //reset startposition and endposition of selectionbox
+            model.getSelectionBox().setSx(0.0);
+            model.getSelectionBox().setSy(0.0);
+            model.getSelectionBox().setEx(0.0);
+            model.getSelectionBox().setEy(0.0);
+            model.getSelectionBox().draw();
             return;
         }
 
