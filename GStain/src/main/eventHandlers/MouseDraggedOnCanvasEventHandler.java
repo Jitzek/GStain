@@ -28,7 +28,6 @@ public class MouseDraggedOnCanvasEventHandler implements EventHandler<MouseEvent
                 break;
         }
     }
-
     @Override
     public void handlePointerTool(MouseEvent mouseEvent) {
         if (!model.getToolModel().isDragging()) {
@@ -43,6 +42,7 @@ public class MouseDraggedOnCanvasEventHandler implements EventHandler<MouseEvent
                 }
             }
         }
+        model.getToolModel().isDragging(true);
         if (!model.getToolModel().hasLegalDragPivot()){
             //on every drag update set endpoint x,y of the selectionbox
             model.getSelectionBox().setEx(mouseEvent.getX());
@@ -50,8 +50,6 @@ public class MouseDraggedOnCanvasEventHandler implements EventHandler<MouseEvent
             model.getSelectionBox().draw();
             return;
         }
-
-        model.getToolModel().isDragging(true);
         model.getToolModel().setMouseDragEndX(mouseEvent.getX());
         model.getToolModel().setMouseDragEndY(mouseEvent.getY());
 
@@ -73,4 +71,9 @@ public class MouseDraggedOnCanvasEventHandler implements EventHandler<MouseEvent
     public void handleEllipseTool(MouseEvent mouseEvent) {
         //
     }
+    /*
+    private void handleSelectionBox(MouseEvent mouseEvent){
+
+    }
+     */
 }
