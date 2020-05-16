@@ -40,6 +40,30 @@ public class MouseReleasedOnCanvasEventHandler implements EventHandler<MouseEven
         if (!model.getToolModel().isDragging()) {
             return;
         }
+        if(!model.getToolModel().hasLegalDragPivot()){
+            //check collision with selectionbox
+            model.getSelectionBox().setEx(mouseEvent.getX());
+            model.getSelectionBox().setEy(mouseEvent.getY());
+            double mx = (model.getSelectionBox().getSx() + model.getSelectionBox().getEx()) / 2;
+            double my = (model.getSelectionBox().getSy() + model.getSelectionBox().getEy()) / 2;
+            double w = Math.abs(model.getSelectionBox().getSx() - model.getSelectionBox().getEx());
+            double h = Math.abs(model.getSelectionBox().getSy() - model.getSelectionBox().getEy());
+            for(CanvasElement canvasElement : model.getCanvas().getCanvasElements()){
+                if(canvasElement.overlaps(mx, my, w, h)){
+                    canvasElement.select();
+                }
+            }
+            //reset startposition and endposition of selectionbox
+            model.getSelectionBox().setSx(0.0);
+            model.getSelectionBox().setSy(0.0);
+            model.getSelectionBox().setEx(0.0);
+            model.getSelectionBox().setEy(0.0);
+            model.getSelectionBox().draw();
+            model.getToolModel().isDragging(false);
+            return;
+        }
+
+
 
         ArrayList<CanvasElement> elements = new ArrayList<>();
         for (CanvasElement ce : model.getCanvas().getCanvasElements()) {

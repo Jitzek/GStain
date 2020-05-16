@@ -88,6 +88,7 @@ public class CanvasInitDialog {
                 if (!titleField.getText().matches("[A-Za-z0-9_ÄäËëÖöÏïÜüÿÂâÊêÔôÎîÛûÁáÉéÓóÍíÚúÝýÀàÈèÒòÌìÙù!@#$^&()+={} ]+") || !widthField.getText().matches("[0-9]+") || !heightField.getText().matches("[0-9]+")) return null;
 
                 model.createCanvas(titleField.getText(), Double.parseDouble(widthField.getText()), Double.parseDouble(heightField.getText()));
+                model.createSelectionBox();
 
                 dialog.close();
             }
