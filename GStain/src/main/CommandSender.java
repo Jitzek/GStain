@@ -35,6 +35,7 @@ public class CommandSender {
     }
 
     public void execute(Command command) {
+        System.out.println("Executing " + CC.CYAN.getColor() + command.getClass().getSimpleName() + CC.RESET.getColor());
         cleanList();
         pointer = 0;
         commands.add(0, command);
@@ -43,6 +44,7 @@ public class CommandSender {
 
     public void undo() {
         if (pointer >= commands.size()) return;
+        System.out.println("Undoing " + CC.CYAN.getColor() + commands.get(pointer).getClass().getSimpleName() + CC.RESET.getColor());
         commands.get(pointer).undo();
         pointer++;
     }
@@ -51,5 +53,6 @@ public class CommandSender {
         if (pointer == 0) return;
         pointer--;
         commands.get(pointer).redo();
+        System.out.println("Redoing " + CC.CYAN.getColor() + commands.get(pointer).getClass().getSimpleName() + CC.RESET.getColor());
     }
 }

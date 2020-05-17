@@ -1,9 +1,9 @@
 package main.canvasElements.shapes;
 
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Path;
 import main.Canvas;
 import main.canvasElements.CanvasElement;
+import main.canvasElements.SelectionBox;
 import main.strategies.canvasElementStrategies.deselect.DeselectElementStrategy;
 import main.strategies.canvasElementStrategies.select.SelectElementStrategy;
 
@@ -11,7 +11,7 @@ import java.util.UUID;
 
 public abstract class Shape implements CanvasElement {
     private final Canvas parent;
-    private Path selectionStyle = null;
+    private SelectionBox selectionBox = null;
     private UUID uuid;
     private double x;
     private double y;
@@ -90,6 +90,11 @@ public abstract class Shape implements CanvasElement {
     }
 
     @Override
+    public void setSelected(boolean selected) {
+        this.selected = selected;
+    }
+
+    @Override
     public void select() {
         selected = true;
         new SelectElementStrategy().select(getParent(), this);
@@ -107,22 +112,17 @@ public abstract class Shape implements CanvasElement {
     }
 
     @Override
-    public void setSelectionStyle(Path selectionStyle) {
-        this.selectionStyle = selectionStyle;
-    }
-
-    @Override
-    public Path getSelectionStyle() {
-        return selectionStyle;
-    }
-
-    @Override
-    public void decorate() {
-
-    }
-
-    @Override
     public void position(double x, double y) {
 
+    }
+
+    @Override
+    public SelectionBox getSelectionBox() {
+        return selectionBox;
+    }
+
+    @Override
+    public void setSelectionBox(SelectionBox selectionBox) {
+        this.selectionBox = selectionBox;
     }
 }

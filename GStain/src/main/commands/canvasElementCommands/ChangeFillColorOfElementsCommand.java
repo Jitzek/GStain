@@ -23,14 +23,14 @@ public class ChangeFillColorOfElementsCommand implements Command {
     @Override
     public void execute() {
         for (CanvasElement element : elements) {
-            new ChangeElementFillColorStrategy().changeFill(element, new_color);
+            new ChangeElementFillColorStrategy().changeColor(element, new_color);
         }
     }
 
     @Override
     public void undo() {
         for (int i = 0; i < elements.size(); i++) {
-            new ChangeElementFillColorStrategy().changeFill(elements.get(i), prev_colors.get(i));
+            new ChangeElementFillColorStrategy().changeColor(elements.get(i), prev_colors.get(i));
         }
     }
 

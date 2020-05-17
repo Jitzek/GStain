@@ -2,7 +2,6 @@ package main.strategies.canvasElementStrategies.drag;
 
 import main.Canvas;
 import main.canvasElements.CanvasElement;
-import main.canvasElements.Compound;
 
 public class DragCompoundStrategy implements DragElementStrategy {
     @Override

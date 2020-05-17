@@ -4,11 +4,9 @@ import main.Canvas;
 import main.canvasElements.CanvasElement;
 import main.canvasElements.Compound;
 import main.commands.Command;
-import main.strategies.canvasElementStrategies.draw.DrawCompoundStrategy;
-import main.strategies.canvasElementStrategies.draw.DrawElementStrategy;
 import main.strategies.canvasElementStrategies.remove.RemoveElementStrategy;
 
-import java.util.*;
+import java.util.ArrayList;
 
 public class ConvertToCompoundCommand implements Command {
     private final Canvas canvas;
@@ -33,6 +31,7 @@ public class ConvertToCompoundCommand implements Command {
         }
         canvas.insertCanvasElement(index, compound);
         compound.draw();
+        compound.select();
     }
 
     @Override

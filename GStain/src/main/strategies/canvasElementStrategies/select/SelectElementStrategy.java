@@ -1,19 +1,21 @@
 package main.strategies.canvasElementStrategies.select;
 
 import javafx.scene.paint.Color;
-import javafx.scene.shape.HLineTo;
-import javafx.scene.shape.MoveTo;
-import javafx.scene.shape.Path;
-import javafx.scene.shape.VLineTo;
+import javafx.scene.shape.*;
 import main.Canvas;
 import main.canvasElements.CanvasElement;
-import main.canvasElements.Compound;
-import main.canvasElements.shapes.Ellipse;
-import main.canvasElements.shapes.Rectangle;
+import main.canvasElements.SelectionBox;
+import main.canvasElements.SelectionPoint;
+import main.canvasElements.SelectionPointType;
 
 public class SelectElementStrategy {
     public void select(Canvas canvas, CanvasElement element) {
-        if (element.getSelectionStyle() != null) return;
+        if (element.getSelectionBox() != null) return;
+
+        /*
+        Create SelectionBox
+         */
+        element.setSelectionBox(new SelectionBox(element));
 
         Path selectionStyle = new Path();
 
@@ -48,6 +50,100 @@ public class SelectElementStrategy {
 
         canvas.getChildren().add(selectionStyle);
 
-        element.setSelectionStyle(selectionStyle);
+        element.getSelectionBox().setSelectionStyle(selectionStyle);
+
+        /*
+        Create Selection Points
+         */
+
+        /*double width = SelectionPoint.WIDTH;
+        double height = SelectionPoint.HEIGHT;
+
+        // Top Left
+
+        x = element.getX();
+        y = element.getY();
+
+        x -= element.getWidth()/2;
+        y -= element.getHeight()/2;
+
+        Rectangle point = new Rectangle(x - width/2, y  - height/2, width, height);
+        point.setFill(Color.GRAY);
+        element.getSelectionBox().getPoints().add(new SelectionPoint(
+                SelectionPointType.TOPLEFT,
+                new double[]{x, y},
+                point));
+
+
+        // Top Mid
+        x += element.getWidth()/2;
+        point = new Rectangle(x - width/2, y  - height/2, width, height);
+        point.setFill(Color.GRAY);
+        element.getSelectionBox().getPoints().add(new SelectionPoint(
+                SelectionPointType.TOPMID,
+                new double[]{x, y},
+                point));
+
+
+        // Top Right
+        x += element.getWidth()/2;
+        point = new Rectangle(x - width/2, y  - height/2, width, height);
+        point.setFill(Color.GRAY);
+        element.getSelectionBox().getPoints().add(new SelectionPoint(
+                SelectionPointType.TOPRIGHT,
+                new double[]{x, y},
+                point));
+
+
+        // Mid Right
+        y += element.getWidth()/2;
+        point = new Rectangle(x - width/2, y  - height/2, width, height);
+        point.setFill(Color.GRAY);
+        element.getSelectionBox().getPoints().add(new SelectionPoint(
+                SelectionPointType.MIDRIGHT,
+                new double[]{x, y},
+                point));
+
+
+        // Bottom Right
+        y += element.getWidth()/2;
+        point = new Rectangle(x - width/2, y  - height/2, width, height);
+        point.setFill(Color.GRAY);
+        element.getSelectionBox().getPoints().add(new SelectionPoint(
+                SelectionPointType.BOTTOMRIGHT,
+                new double[]{x, y},
+                point));
+
+
+        // Bottom Mid
+        x -= element.getWidth()/2;
+        point = new Rectangle(x - width/2, y  - height/2, width, height);
+        point.setFill(Color.GRAY);
+        element.getSelectionBox().getPoints().add(new SelectionPoint(
+                SelectionPointType.BOTTOMMID,
+                new double[]{x, y},
+                point));
+
+        // Bottom Left
+        x -= element.getWidth()/2;
+        point = new Rectangle(x - width/2, y  - height/2, width, height);
+        point.setFill(Color.GRAY);
+        element.getSelectionBox().getPoints().add(new SelectionPoint(
+                SelectionPointType.BOTTOMLEFT,
+                new double[]{x, y},
+                point));
+
+        // Mid Left
+        y -= element.getWidth()/2;
+        point = new Rectangle(x - width/2, y  - height/2, width, height);
+        point.setFill(Color.GRAY);
+        element.getSelectionBox().getPoints().add(new SelectionPoint(
+                SelectionPointType.MIDLEFT,
+                new double[]{x, y},
+                point));
+
+        for (SelectionPoint sp : element.getSelectionBox().getPoints()) {
+            canvas.getChildren().add(sp.getUiElement());
+        }*/
     }
 }
