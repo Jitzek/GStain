@@ -15,11 +15,11 @@ public class ResizeRectangleStrategy implements ResizeElementStrategy {
         element.setHeight(height);
 
         // Draw Rectangle logic (Paint on GUI)
-        // TODO find way to change size of existing shape instead of replacing it
+        // FIXME changing GUI element's width/height causes shape to misalign (hence the current overwrite)
         javafx.scene.shape.Rectangle rectangle = new javafx.scene.shape.Rectangle(element.getX() - element.getWidth()/2, element.getY() - element.getHeight()/2, element.getWidth(), element.getHeight());
         rectangle.setFill(element.getColor());
 
-        canvas.getChildren().set(canvas.getIndexOfElement(element, true), rectangle);
+        canvas.getChildren().set(canvas.getChildren().indexOf(((Rectangle) element).getRectangle()), rectangle);
 
         ((Rectangle) element).setRectangle(rectangle);
 

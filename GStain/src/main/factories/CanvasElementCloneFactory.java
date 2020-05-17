@@ -1,8 +1,9 @@
 package main.factories;
 
-import javafx.scene.paint.Color;
 import main.canvasElements.CanvasElement;
 import main.canvasElements.Compound;
+import main.canvasElements.decorators.border.BorderDecorator;
+import main.canvasElements.decorators.border.RectangleBorderDecorator;
 import main.canvasElements.shapes.Ellipse;
 import main.canvasElements.shapes.Rectangle;
 
@@ -21,6 +22,8 @@ public class CanvasElementCloneFactory {
                 return new Ellipse(element.getParent(), element.getX(), element.getY(), element.getColor(), element.getWidth(), element.getHeight());
             case "TRIANGLE":
                 break;
+            case "RECTANGLEBORDERDECORATOR":
+                return new RectangleBorderDecorator(CanvasElementCloneFactory.getClone(((BorderDecorator) element).getElement()), ((BorderDecorator) element).getBorderStyle(), ((BorderDecorator) element).getBorderThickness(), ((BorderDecorator) element).getBorderColor());
         }
         return null;
     }

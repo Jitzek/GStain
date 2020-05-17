@@ -4,8 +4,6 @@ import main.Canvas;
 import main.canvasElements.CanvasElement;
 import main.canvasElements.Compound;
 import main.commands.Command;
-import main.strategies.canvasElementStrategies.draw.DrawCompoundStrategy;
-import main.strategies.canvasElementStrategies.draw.DrawElementStrategy;
 import main.strategies.canvasElementStrategies.remove.RemoveElementStrategy;
 
 import java.util.ArrayList;
@@ -26,14 +24,12 @@ public class ConvertToElementsCommand implements Command {
 
     @Override
     public void execute() {
-        int i = 0;
         for (Compound compound : compounds) {
             new RemoveElementStrategy().remove(canvas, compound);
             for (CanvasElement element : new ArrayList<>(compound.getChildren())) {
                 element.draw();
                 elements.add(element);
             }
-            i++;
         }
     }
 

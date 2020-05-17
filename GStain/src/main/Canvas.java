@@ -3,6 +3,7 @@ package main;
 import javafx.scene.layout.Pane;
 import main.canvasElements.CanvasElement;
 import main.canvasElements.Compound;
+import main.canvasElements.SelectionPoint;
 
 import java.util.ArrayList;
 
@@ -10,6 +11,7 @@ public class Canvas extends Pane {
     private String name;
     private static Canvas Instance;
     private final ArrayList<CanvasElement> canvasElements = new ArrayList<>();
+    private SelectionPoint selectedSelectionPoint = null;
 
     private Canvas() {
         // Singleton
@@ -29,6 +31,14 @@ public class Canvas extends Pane {
     }
     public void setName(String name) {
         Instance.name = name;
+    }
+
+    public SelectionPoint getSelectedSelectionPoint() {
+        return selectedSelectionPoint;
+    }
+
+    public void setSelectedSelectionPoint(SelectionPoint sp) {
+        selectedSelectionPoint = sp;
     }
 
     /**
