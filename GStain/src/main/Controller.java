@@ -44,7 +44,7 @@ public class Controller {
     private boolean canvasLoaded = false;
 
     public void init(Stage stage) {
-        model = new Model(stage, CanvasHolder, selectedElementLabel, ShapeWidth, ShapeHeight);
+		model = new Model(stage, CanvasHolder, selectedElementLabel, Stroke, ShapeWidth, ShapeHeight);
 
         CanvasArea.setPrefSize(model.getScene().getWidth(), model.getScene().getWidth());
         CanvasArea.setStyle("-fx-background-color: #3B3B3B");
@@ -108,19 +108,25 @@ public class Controller {
     }
 
     private void configureMiscEventHandlers() {
-        ShapeWidth.focusedProperty().addListener((arg0, oldPropertyValue, newPropertyValue) -> {
-            if (!newPropertyValue) {
-                changeWidth();
-            }
-        });
+        /*ShapeWidth.focusedProperty().addListener((arg0, oldPropertyValue, newPropertyValue) -> {
+            if (!newPropertyValue) changeWidth();
+        });*/
         ShapeWidth.setOnKeyPressed(keyEvent -> {
             if (keyEvent.getCode() == KeyCode.ENTER) changeWidth();
         });
-        ShapeHeight.focusedProperty().addListener((arg0, oldPropertyValue, newPropertyValue) -> {
+
+        /*ShapeHeight.focusedProperty().addListener((arg0, oldPropertyValue, newPropertyValue) -> {
             if (!newPropertyValue) changeHeight();
-        });
+        });*/
         ShapeHeight.setOnKeyPressed(keyEvent -> {
             if (keyEvent.getCode() == KeyCode.ENTER) changeHeight();
+        });
+
+        /*Stroke.focusedProperty().addListener((arg0, oldPropertyValue, newPropertyValue) -> {
+            if (!newPropertyValue) changeStroke();
+        });*/
+        Stroke.setOnKeyPressed(keyEvent -> {
+            if (keyEvent.getCode() == KeyCode.ENTER) changeStroke();
         });
     }
 
@@ -129,8 +135,9 @@ public class Controller {
             // Handle closing and creating canvas
             if (model.unsavedChanges()) {
                 new SaveBeforeClosingDialog(model, CanvasHolder).showDialog(true);
+				return;
             }
-            return;
+			model.closeCanvas();
         }
 
         // CanvasInitDialog handles Canvas Creation and Event handlers assignment
@@ -204,9 +211,13 @@ public class Controller {
         model.changeBorderColor(BorderColorPicker.getValue());
     }
 
-    public void handleStrokeChange(KeyEvent event) {
+    public void handleStrokeChange() {
         if (!Stroke.getText().matches("[0-9.]+")) return;
-        model.changeBorderThickness(Double.parseDouble(Stroke.getText()));
+        model.setLastStrokeSize(Double.parseDouble(Stroke.getText()));
+    }
+	
+	private void changeStroke() {
+        model.changeSelectedShapesStroke(model.getLastStrokeSize());
     }
 
     public void handleWidthChange() {
@@ -225,5 +236,13 @@ public class Controller {
 
     private void changeHeight() {
         model.changeSelectedShapesHeight(model.getLastShapeHeight());
+    }
+
+    public void dev_btn_1() {
+        model.printHierarchy();
+    }
+
+    public void dev_btn_2() {
+
     }
 }

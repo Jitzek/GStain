@@ -9,6 +9,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import main.canvasElements.decorators.border.BorderDecorator;
 import main.BorderStyle;
 import main.Canvas;
 import main.CommandSender;
@@ -16,6 +17,8 @@ import main.canvasElements.CanvasElement;
 import main.canvasElements.Compound;
 import main.canvasElements.SelectionBox;
 import main.commands.canvasElementCommands.*;
+import main.commands.canvasElementCommands.borderCommands.ChangeColorOfBordersCommand;
+import main.commands.canvasElementCommands.borderCommands.ChangeThicknessOfBordersCommand;
 import main.commands.canvasElementCommands.compoundCommands.ConvertToCompoundCommand;
 import main.commands.canvasElementCommands.compoundCommands.ConvertToElementsCommand;
 import main.eventHandlers.MouseDraggedOnCanvasEventHandler;
@@ -23,6 +26,7 @@ import main.eventHandlers.MousePressedOnCanvasEventHandler;
 import main.eventHandlers.MouseReleasedOnCanvasEventHandler;
 import main.factories.CanvasElementCloneFactory;
 import main.factories.ShapeFactory;
+import main.strategies.canvasElementStrategies.deconvert.DeConvertElementFromBorderDecoratorStrategy;
 import main.fileio.Export;
 import main.fileio.Import;
 import main.tools.ToolType;
@@ -45,19 +49,22 @@ public class Model {
     private Color selectedFillColor = Color.BLACK;
     private Color selectedBorderColor = Color.BLACK;
     private double selectedBorderThickness = 0.0;
+	private double lastStrokeSize;
     private double lastShapeWidth;
     private double lastShapeHeight;
+	private final TextField StrokeSize;
     private final TextField ShapeWidth;
     private final TextField ShapeHeight;
 
     private final Label selectedElementLabel;
 
-    public Model(Stage stage, StackPane canvasHolder, Label selectedElementLabel, TextField ShapeWidth, TextField ShapeHeight) {
+    public Model(Stage stage, StackPane canvasHolder, Label selectedElementLabel, TextField StrokeSize, TextField ShapeWidth, TextField ShapeHeight) {
         this.stage = stage;
         this.canvasHolder = canvasHolder;
         this.selectedElementLabel = selectedElementLabel;
         commandSender = new CommandSender();
         canvas = Canvas.getInstance();
+		this.StrokeSize = StrokeSize;
         this.ShapeWidth = ShapeWidth;
         this.ShapeHeight = ShapeHeight;
     }
@@ -140,6 +147,13 @@ public class Model {
         return selectedElementLabel;
     }
 
+	public double getLastStrokeSize() {
+        return lastStrokeSize;
+    }
+    public void setLastStrokeSize(double stroke) {
+        lastStrokeSize = stroke;
+    }
+	
     public double getLastShapeWidth() {
         return lastShapeWidth;
     }
@@ -171,9 +185,13 @@ public class Model {
 
         // Display width and height of element
         if (count == 1 && !(canvas.getCanvasElementAt(index, false, false) instanceof Compound)) {
+            if (canvas.getCanvasElementAt(index, false, false) instanceof BorderDecorator) {
+                StrokeSize.setText(String.valueOf(((BorderDecorator) canvas.getCanvasElementAt(index, false, false)).getBorderThickness()));
+            }
             ShapeWidth.setText(String.valueOf(canvas.getCanvasElementAt(index, false, false).getWidth()));
             ShapeHeight.setText(String.valueOf(canvas.getCanvasElementAt(index, false, false).getHeight()));
         } else {
+            StrokeSize.setText("");
             ShapeWidth.setText("");
             ShapeHeight.setText("");
         }
@@ -329,12 +347,20 @@ public class Model {
         return selectedFillColor;
     }
 
+    public void changeSelectedShapesStroke(double stroke) {
+        if (canvas.getSelectedCanvasElements().size() < 1) return;
+        // FIXME pressing on canvas will deselect element(s) before the stroke can be changed
+        commandSender.execute(new ChangeThicknessOfBordersCommand(canvas.getSelectedCanvasElements(), stroke));
+        handleElementSelection();
+    }
     public void changeSelectedShapesWidth(double width) {
+        if (canvas.getSelectedCanvasElements().size() < 1) return;
         // FIXME pressing on canvas will deselect element(s) before the width can be changed
         commandSender.execute(new SetWidthOfElementsCommand(canvas.getSelectedCanvasElements(), width));
         handleElementSelection();
     }
     public void changeSelectedShapesHeight(double height) {
+        if (canvas.getSelectedCanvasElements().size() < 1) return;
         // FIXME pressing on canvas will deselect element(s) before the height can be changed
         commandSender.execute(new SetHeightOfElementsCommand(canvas.getSelectedCanvasElements(), height));
         handleElementSelection();
@@ -342,18 +368,15 @@ public class Model {
 
 
     public void changeBorderColor(Color color) {
-        //
+        if (canvas.getSelectedCanvasElements().size() < 1) return;
+        ArrayList<BorderDecorator> toBeRecolored = new ArrayList<>();
+        for (CanvasElement element : canvas.getSelectedCanvasElements()) {
+            if (element instanceof BorderDecorator) toBeRecolored.add((BorderDecorator) element);
+        }
+        commandSender.execute(new ChangeColorOfBordersCommand(toBeRecolored, color));
     }
     public Color getSelectedBorderColor() {
         return selectedBorderColor;
-    }
-
-    public void changeBorderThickness(double thickness) {
-        //
-    }
-
-    private void convertToBorderDecorator(CanvasElement element, BorderStyle borderStyle, double borderThickness, Color borderColor) {
-
     }
 
     public boolean unsavedChanges() {
