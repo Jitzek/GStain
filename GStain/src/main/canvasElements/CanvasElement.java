@@ -23,6 +23,7 @@ public interface CanvasElement {
     void setWidth(double width);
     double getHeight();
     void setHeight(double height);
+    void setSelected(boolean selected);
     void select();
     void deselect();
     boolean isSelected();
@@ -30,8 +31,6 @@ public interface CanvasElement {
     boolean overlaps(double x, double y, double width, double height);
     void hide();
     void show();
-    void setSelectionStyle(Path selectionStyle);
-    Path getSelectionStyle();
     void recolor(Color color);
     void draw();
     void remove();
@@ -40,6 +39,7 @@ public interface CanvasElement {
     void resizeWidth(double width);
     void resizeHeight(double height);
     void position(double x, double y);
-    void decorate();
     String accept(CanvasElementVisitor canvasElementVisitor);
+    SelectionBox getSelectionBox();
+    void setSelectionBox(SelectionBox selectionBox);
 }

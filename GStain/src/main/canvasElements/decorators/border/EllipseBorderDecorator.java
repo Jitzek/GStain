@@ -5,6 +5,7 @@ import main.Canvas;
 import main.canvasElements.CanvasElement;
 import main.canvasElements.SelectionBox;
 import main.canvasElements.decorators.border.border.BorderStyle;
+import main.visitor.CanvasElementVisitor;
 
 import java.util.UUID;
 
@@ -159,6 +160,12 @@ public class EllipseBorderDecorator extends BorderDecorator {
     @Override
     public void position(double x, double y) {
         getElement().position(x, y);
+    }
+
+    // TODO
+    @Override
+    public String accept(CanvasElementVisitor canvasElementVisitor) {
+        return null;
     }
 
     @Override

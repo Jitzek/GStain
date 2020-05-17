@@ -1,9 +1,8 @@
 package main.canvasElements;
 
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Path;
 import main.Canvas;
-import main.strategies.canvasElementStrategies.deselect.DeselectCompoundStrategy;
+import main.strategies.canvasElementStrategies.deselect.DeselectElementStrategy;
 import main.strategies.canvasElementStrategies.draw.DrawCompoundStrategy;
 import main.strategies.canvasElementStrategies.select.SelectCompoundStrategy;
 import main.strategies.canvasElementStrategies.size.ResizeCompoundStrategy;
@@ -18,22 +17,43 @@ public class Compound implements CanvasElement {
     private final ArrayList<CanvasElement> children;
     private UUID uuid;
     private boolean selected = false;
-    private Path selectionStyle = null;
+    private SelectionBox selectionBox = null;
+
+    private double x;
+    private double y;
+    private double width;
+    private double height;
 
     public Compound(Canvas parent) {
         this.parent = parent;
         this.uuid = UUID.randomUUID();
         children = new ArrayList<>();
-        setWidth(-1);
-        setHeight(-1);
     }
 
     public Compound(Canvas parent, ArrayList<CanvasElement> canvasElements) {
         this.parent = parent;
         this.uuid = UUID.randomUUID();
         children = canvasElements;
-        setWidth(-1);
-        setHeight(-1);
+
+        configure_X_Y_Width_Height();
+    }
+    private void configure_X_Y_Width_Height() {
+        double min_x = -1;
+        double max_x = -1;
+        double min_y = -1;
+        double max_y = -1;
+        for (CanvasElement child : getChildren()) {
+            if ((min_x > child.getX() - child.getWidth()/2) || min_x == -1) min_x = child.getX() - child.getWidth()/2;
+            if ((max_x < child.getX() + child.getWidth()/2) || max_x == -1) max_x = child.getX() + child.getWidth()/2;
+            if ((min_y > child.getY() - child.getHeight()/2) || min_y == -1) min_y = child.getY() - child.getHeight()/2;
+            if ((max_y < child.getY() + child.getHeight()/2) || max_y == -1) max_y = child.getY() + child.getHeight()/2;
+        }
+
+        this.width = Math.abs(max_x - min_x);
+        this.height = Math.abs(max_y - min_y);
+
+        this.x = min_x + width/2;
+        this.y = min_y + height/2;
     }
 
     @Override
@@ -53,30 +73,37 @@ public class Compound implements CanvasElement {
 
     public void addChild(CanvasElement element) {
         children.add(element);
+        configure_X_Y_Width_Height();
     }
 
     public void addChildren(CanvasElement... elements) {
         children.addAll(Arrays.asList(elements));
+        configure_X_Y_Width_Height();
     }
 
     public void addChildren(ArrayList<CanvasElement> elements) {
         children.addAll(elements);
+        configure_X_Y_Width_Height();
     }
 
     public void removeChild(CanvasElement element) {
         children.remove(element);
+        configure_X_Y_Width_Height();
     }
 
     public void removeChildren(CanvasElement... elements) {
         children.removeAll(Arrays.asList(elements));
+        configure_X_Y_Width_Height();
     }
 
     public void removeChildren(ArrayList<CanvasElement> elements) {
         children.removeAll(elements);
+        configure_X_Y_Width_Height();
     }
 
     public void removeChildAt(int index) {
         children.remove(index);
+        configure_X_Y_Width_Height();
     }
 
     public CanvasElement selectChildAt(int index) {
@@ -129,22 +156,22 @@ public class Compound implements CanvasElement {
 
     @Override
     public double getX() {
-        return 0;
+        return x;
     }
 
     @Override
     public void setX(double x) {
-
+        this.x = x;
     }
 
     @Override
     public double getY() {
-        return 0;
+        return y;
     }
 
     @Override
     public void setY(double y) {
-
+        this.y = y;
     }
 
     @Override
@@ -169,22 +196,27 @@ public class Compound implements CanvasElement {
 
     @Override
     public double getWidth() {
-        return 0;
+        return width;
     }
 
     @Override
     public void setWidth(double width) {
-
+        this.width = width;
     }
 
     @Override
     public double getHeight() {
-        return 0;
+        return height;
     }
 
     @Override
     public void setHeight(double height) {
+        this.height = height;
+    }
 
+    @Override
+    public void setSelected(boolean selected) {
+        this.selected = selected;
     }
 
     @Override
@@ -196,7 +228,7 @@ public class Compound implements CanvasElement {
     @Override
     public void deselect() {
         selected = false;
-        new DeselectCompoundStrategy().deselect(parent, this);
+        new DeselectElementStrategy().deselect(parent, this);
     }
 
     @Override
@@ -258,16 +290,6 @@ public class Compound implements CanvasElement {
     }
 
     @Override
-    public void setSelectionStyle(Path selectionStyle) {
-        this.selectionStyle = selectionStyle;
-    }
-
-    @Override
-    public Path getSelectionStyle() {
-        return selectionStyle;
-    }
-
-    @Override
     public void recolor(Color color) {
         for (CanvasElement element : children) {
             element.recolor(color);
@@ -287,14 +309,26 @@ public class Compound implements CanvasElement {
     }
 
     @Override
-    public void decorate() {
+    public SelectionBox getSelectionBox() {
+        return selectionBox;
+    }
 
+    @Override
+    public void setSelectionBox(SelectionBox selectionBox) {
+        this.selectionBox = selectionBox;
     }
 
     @Override
     public void drag(double x, double y) {
         for (CanvasElement ce : getChildren()) {
             ce.drag(x, y);
+        }
+
+        setX(getX() + x);
+        setY(getY() + y);
+
+        if (isSelected()) {
+            getSelectionBox().drag(x, y);
         }
     }
 

@@ -1,8 +1,6 @@
 package main.canvasElements.shapes;
 
-import javafx.scene.Node;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Path;
 import main.Canvas;
 import main.strategies.canvasElementStrategies.draw.DrawRectangleStrategy;
 import main.strategies.canvasElementStrategies.size.ResizeRectangleStrategy;
@@ -46,11 +44,13 @@ public class Rectangle extends Shape {
     }
 
     public void hide() {
-        getParent().getChildren().get(getParent().getChildren().indexOf(rectangle)).setOpacity(0.1);
+        getRectangle().setOpacity(0.1);
+        //getParent().getChildren().get(getParent().getChildren().indexOf(rectangle)).setOpacity(0.1);
     }
 
     public void show() {
-        getParent().getChildren().get(getParent().getChildren().indexOf(rectangle)).setOpacity(getElementOpacity());
+        getRectangle().setOpacity(getElementOpacity());
+        //getParent().getChildren().get(getParent().getChildren().indexOf(rectangle)).setOpacity(getElementOpacity());
     }
 
     @Override
@@ -66,13 +66,12 @@ public class Rectangle extends Shape {
 
     @Override
     public void drag(double x, double y) {
-        select();
-
         setX(getX() + x);
         setY(getY() + y);
 
-        getSelectionStyle().setTranslateX(getSelectionStyle().getTranslateX() + x);
-        getSelectionStyle().setTranslateY(getSelectionStyle().getTranslateY() + y);
+        if (isSelected()) {
+            getSelectionBox().drag(x, y);
+        }
 
         rectangle.setTranslateX(rectangle.getTranslateX() + x);
         rectangle.setTranslateY(rectangle.getTranslateY() + y);

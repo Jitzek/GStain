@@ -81,8 +81,8 @@ public class MousePressedOnCanvasEventHandler implements EventHandler<MouseEvent
                 ce.deselect();
             }
             //set x,y of startpoint of selectionbox
-            model.getSelectionBox().setSx(mouseEvent.getX());
-            model.getSelectionBox().setSy(mouseEvent.getY());
+            model.getSelectionArea().setSx(mouseEvent.getX());
+            model.getSelectionArea().setSy(mouseEvent.getY());
         }
 
         for (CanvasElement ce : model.getCanvas().getSelectedCanvasElements()) {
