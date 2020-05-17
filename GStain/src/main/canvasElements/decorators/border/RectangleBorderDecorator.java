@@ -8,6 +8,7 @@ import main.canvasElements.decorators.border.border.BorderStyle;
 import main.strategies.canvasElementStrategies.deselect.DeselectElementStrategy;
 import main.strategies.canvasElementStrategies.draw.DrawBorderStrategy;
 import main.strategies.canvasElementStrategies.select.SelectElementStrategy;
+import main.visitor.CanvasElementVisitor;
 
 import java.util.UUID;
 
@@ -175,5 +176,11 @@ public class RectangleBorderDecorator extends BorderDecorator {
     @Override
     public void setSelectionBox(SelectionBox selectionBox) {
         getElement().setSelectionBox(selectionBox);
+    }
+
+    // TODO
+    @Override
+    public String accept(CanvasElementVisitor canvasElementVisitor) {
+        return null;
     }
 }

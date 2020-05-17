@@ -1,7 +1,6 @@
 package main.canvasElements.shapes;
 
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Path;
 import main.Canvas;
 import main.strategies.canvasElementStrategies.draw.DrawEllipseStrategy;
 import main.strategies.canvasElementStrategies.size.ResizeEllipseStrategy;
@@ -66,13 +65,12 @@ public class Ellipse extends Shape {
 
     @Override
     public void drag(double x, double y) {
-        select();
-
         setX(getX() + x);
         setY(getY() + y);
 
-        getSelectionStyle().setTranslateX(getSelectionStyle().getTranslateX() + x);
-        getSelectionStyle().setTranslateY(getSelectionStyle().getTranslateY() + y);
+        if (isSelected()) {
+            getSelectionBox().drag(x, y);
+        }
 
         ellipse.setTranslateX(ellipse.getTranslateX() + x);
         ellipse.setTranslateY(ellipse.getTranslateY() + y);

@@ -1,6 +1,5 @@
 package main.fileio;
 
-import jdk.internal.joptsimple.internal.Strings;
 import main.Canvas;
 import main.canvasElements.CanvasElement;
 import main.canvasElements.Compound;

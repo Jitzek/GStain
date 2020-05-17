@@ -9,6 +9,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import main.canvasElements.SelectionArea;
 import main.canvasElements.decorators.border.BorderDecorator;
 import main.BorderStyle;
 import main.Canvas;
@@ -90,8 +91,8 @@ public class Model {
     }
 
     public void createSelectionBox(){
-        SelectionBox selectionBox = getSelectionBox();
-        canvas.getChildren().add(selectionBox.getPath());
+        SelectionArea selectionArea = SelectionArea.getSelectionArea();
+        canvas.getChildren().add(selectionArea.getPath());
     }
 
     private void configureCanvasEventHandlers(Canvas canvas, Model model) {
@@ -435,8 +436,8 @@ public class Model {
         }
     }
 
-    public SelectionBox getSelectionBox() {
-        return SelectionBox.getSelectionBox();
+    public SelectionArea getSelectionArea() {
+        return SelectionArea.getSelectionArea();
     }
 
     public void setSelectionBox(SelectionBox selectionBox) {
