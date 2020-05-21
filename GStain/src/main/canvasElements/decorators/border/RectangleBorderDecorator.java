@@ -178,9 +178,8 @@ public class RectangleBorderDecorator extends BorderDecorator {
         getElement().setSelectionBox(selectionBox);
     }
 
-    // TODO
     @Override
-    public String accept(CanvasElementVisitor canvasElementVisitor) {
-        return null;
+    public String accept(CanvasElementVisitor visitor){
+        return visitor.visitRectangleBorderDecorator(this);
     }
 }

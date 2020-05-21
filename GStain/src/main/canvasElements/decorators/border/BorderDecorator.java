@@ -6,6 +6,7 @@ import main.canvasElements.CanvasElement;
 import main.canvasElements.decorators.border.border.BorderStyle;
 import main.factories.BorderFactory;
 import main.strategies.canvasElementStrategies.size.ResizeBorderStrategy;
+import main.visitor.CanvasElementVisitor;
 
 public abstract class BorderDecorator implements CanvasElement {
     private final CanvasElement element;
@@ -117,4 +118,6 @@ public abstract class BorderDecorator implements CanvasElement {
 
         element.getParent().getChildren().remove(border);
     }
+
+
 }

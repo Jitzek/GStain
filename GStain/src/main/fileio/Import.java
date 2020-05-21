@@ -7,6 +7,8 @@ import javafx.stage.Stage;
 import main.Canvas;
 import main.canvasElements.CanvasElement;
 import main.canvasElements.Compound;
+import main.canvasElements.decorators.border.RectangleBorderDecorator;
+import main.canvasElements.decorators.border.border.BorderStyle;
 import main.canvasElements.shapes.Ellipse;
 import main.canvasElements.shapes.Rectangle;
 import main.models.Model;
@@ -19,20 +21,19 @@ import java.util.List;
 import java.util.Scanner;
 
 public class Import {
-    private List<String> indexer = new ArrayList<String>();
+    private List<String> indexer = new ArrayList<>();
     private Canvas canvas;
     private Stage stage;
     private String filename;
-    private Model model;
     private int currentline = 0;
     public Import(Canvas canvas, Stage stage, Model model){
         this.canvas = canvas;
         this.stage = stage;
-        this.model = model;
         String c = fillIndexer();
         double cwidth = Double.parseDouble(getInfo(c)[2]);
         double cheigth = Double.parseDouble(getInfo(c)[3]);
         model.createCanvas(filename, cwidth, cheigth);
+        model.createSelectionBox();
         traverseGroup(canvas.getCanvasElements());
         for(CanvasElement canvasElement : canvas.getCanvasElements()){
             canvasElement.draw();
@@ -49,11 +50,18 @@ public class Import {
                     canvasElements.add(subgroup);
                     break;
                 case "rectangle":
-                    Rectangle rectangle = new Rectangle(canvas, Double.parseDouble(getInfo(indexer.get(currentline))[1]), Double.parseDouble(getInfo(indexer.get(currentline))[2]), Color.BLACK, Double.parseDouble(getInfo(indexer.get(currentline))[4]), Double.parseDouble(getInfo(indexer.get(currentline))[5]));
-                    canvasElements.add(rectangle);
+                    Rectangle rectangle = new Rectangle(canvas, Double.parseDouble(getInfo(indexer.get(currentline))[1]), Double.parseDouble(getInfo(indexer.get(currentline))[2]), Color.web(getInfo(indexer.get(currentline))[3]), Double.parseDouble(getInfo(indexer.get(currentline))[4]), Double.parseDouble(getInfo(indexer.get(currentline))[5]));
+                    if(getInfo(indexer.get(currentline)).length > 6){
+                        RectangleBorderDecorator rectangleBorderDecorator = new RectangleBorderDecorator(rectangle, convertStringtoBorderStyle(getInfo(indexer.get(currentline))[6]), Double.parseDouble(getInfo(indexer.get(currentline))[7]), Color.web(getInfo(indexer.get(currentline))[8]));
+                        canvasElements.add(rectangleBorderDecorator);
+                    }else{
+                        canvasElements.add(rectangle);
+                    }
+
+
                     break;
                 case "circle":
-                    Ellipse circle = new Ellipse(canvas, Double.parseDouble(getInfo(indexer.get(currentline))[1]), Double.parseDouble(getInfo(indexer.get(currentline))[2]), Color.BLACK, Double.parseDouble(getInfo(indexer.get(currentline))[4]), Double.parseDouble(getInfo(indexer.get(currentline))[5]));
+                    Ellipse circle = new Ellipse(canvas, Double.parseDouble(getInfo(indexer.get(currentline))[1]), Double.parseDouble(getInfo(indexer.get(currentline))[2]), Color.web(getInfo(indexer.get(currentline))[3]), Double.parseDouble(getInfo(indexer.get(currentline))[4]), Double.parseDouble(getInfo(indexer.get(currentline))[5]));
                     canvasElements.add(circle);
                     break;
                 case "triangle":
@@ -74,7 +82,7 @@ public class Import {
         try{
             FileChooser fileChooser = new FileChooser();
             File file = fileChooser.showOpenDialog(stage);
-            filename = file.getName();
+            filename = file.getPath();
             Scanner scanner = new Scanner(file);
             while (scanner.hasNextLine()){
                 String data = scanner.nextLine();
@@ -92,5 +100,22 @@ public class Import {
     }
     private String[] getInfo(String line){
         return line.split(" ", 0);
+    }
+
+    public String getFilename() {
+        return filename;
+    }
+
+    private BorderStyle convertStringtoBorderStyle(String style){
+        switch (style){
+            case "SOLID":
+                return BorderStyle.SOLID;
+            case "DASH":
+                return BorderStyle.DASH;
+            case "DOT":
+                return BorderStyle.DOT;
+            default:
+                return null;
+        }
     }
 }

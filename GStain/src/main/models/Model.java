@@ -56,6 +56,7 @@ public class Model {
 	private final TextField StrokeSize;
     private final TextField ShapeWidth;
     private final TextField ShapeHeight;
+    private String filepath;
 
     private final Label selectedElementLabel;
 
@@ -384,38 +385,43 @@ public class Model {
         return commandSender.getCommands().size() > 0;
     }
 
-    public void importGurbe(StackPane stackPane){
-        new Import(canvas, stage, this);
-        printHierarchy();
+    public void importGurbe(StackPane canvasHolder){
+        Import anImport = new Import(canvas, stage, this);
+        filepath = anImport.getFilename();
     }
 
     /**
      * exports the current project to a .gurbe file
      */
     public void export() {
-        Export exportVisitor = new Export();
-        System.out.println(exportVisitor.export(canvas.getCanvasElements(), canvas));
-        File file = new File("file.gurbe");
-        try{
-            if(file.createNewFile()){
-                System.out.println("File created");
+        if(filepath == null){
+            exportAs();
+        }
+        else{
+            Export exportVisitor = new Export();
+            System.out.println(exportVisitor.export(canvas.getCanvasElements(), canvas));
+            File file = new File(filepath);
+            try{
+                if(file.createNewFile()){
+                    System.out.println("File created");
+                }
+                else{
+                    System.out.println("File already exists");
+                }
             }
-            else{
-                System.out.println("File already exists");
+            catch (IOException e){
+                System.out.println("An error occurred");
+                e.printStackTrace();
             }
-        }
-        catch (IOException e){
-            System.out.println("An error occurred");
-            e.printStackTrace();
-        }
-        try{
-            FileWriter fileWriter = new FileWriter("file.gurbe");
-            fileWriter.write(exportVisitor.export(canvas.getCanvasElements(), canvas));
-            fileWriter.close();
-        }
-        catch(IOException e){
-            System.out.println("An error occurred");
-            e.printStackTrace();
+            try{
+                FileWriter fileWriter = new FileWriter(filepath);
+                fileWriter.write(exportVisitor.export(canvas.getCanvasElements(), canvas));
+                fileWriter.close();
+            }
+            catch(IOException e){
+                System.out.println("An error occurred");
+                e.printStackTrace();
+            }
         }
     }
     public void exportAs(){
@@ -426,6 +432,7 @@ public class Model {
         try {
             File file = fileChooser.showSaveDialog(stage);
             if(file != null){
+                filepath = file.getPath();
                 Export exportVisitor = new Export();
                 FileWriter fileWriter = new FileWriter(file);
                 fileWriter.write(exportVisitor.export(canvas.getCanvasElements(), canvas));

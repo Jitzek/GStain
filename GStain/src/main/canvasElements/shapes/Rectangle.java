@@ -91,8 +91,4 @@ public class Rectangle extends Shape {
     public void resizeHeight(double height) {
         new ResizeRectangleStrategy().resize(getParent(), this, getWidth(), height);
     }
-    @Override
-    public String accept(CanvasElementVisitor visitor){
-        return visitor.visitRectangle(this);
-    }
 }

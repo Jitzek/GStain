@@ -33,7 +33,13 @@ public class Ellipse extends Shape {
         double distY = y - getY();
         double distanceX = Math.sqrt( (distX*distX));
         double distanceY = Math.sqrt( (distY*distY));
-        return (distanceX <= width + getWidth() / 2) && (distanceY <= height + getHeight() / 2);
+        if(width == 0.0 && height == 0.0){
+            return (distanceX <= width + getWidth() / 2) && (distanceY <= height + getHeight() / 2);
+        }
+        else{
+            return (distanceX <= width) && (distanceY <= height);
+        }
+
     }
 
     @Override
@@ -89,9 +95,5 @@ public class Ellipse extends Shape {
     @Override
     public void resizeHeight(double height) {
         new ResizeEllipseStrategy().resize(getParent(), this, getWidth(), height);
-    }
-    @Override
-    public String accept(CanvasElementVisitor visitor){
-        return visitor.visitCircle(this);
     }
 }

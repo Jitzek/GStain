@@ -162,7 +162,6 @@ public class EllipseBorderDecorator extends BorderDecorator {
         getElement().position(x, y);
     }
 
-    // TODO
     @Override
     public String accept(CanvasElementVisitor canvasElementVisitor) {
         return null;
@@ -177,4 +176,5 @@ public class EllipseBorderDecorator extends BorderDecorator {
     public void setSelectionBox(SelectionBox selectionBox) {
         getElement().setSelectionBox(selectionBox);
     }
+
 }

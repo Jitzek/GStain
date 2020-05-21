@@ -31,7 +31,7 @@ public class SaveBeforeClosingDialog {
                 return;
             }
             if (type == yesBtn) {
-                // Save Project
+                model.export();
             }
 
             // Remove Canvas

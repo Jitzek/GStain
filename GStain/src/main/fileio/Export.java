@@ -3,6 +3,8 @@ package main.fileio;
 import main.Canvas;
 import main.canvasElements.CanvasElement;
 import main.canvasElements.Compound;
+import main.canvasElements.decorators.border.BorderDecorator;
+import main.canvasElements.decorators.border.RectangleBorderDecorator;
 import main.canvasElements.shapes.Ellipse;
 import main.canvasElements.shapes.Rectangle;
 import main.canvasElements.shapes.Shape;
@@ -30,11 +32,7 @@ public class Export implements CanvasElementVisitor {
         return sb.toString();
     }
 
-    /**
-     * get all info for every circle
-     * @param circle circle that has been visited
-     * @return string with all info from the circle that will be put in the file
-     */
+    /*
     @Override
     public String visitCircle(Ellipse circle) {
         return "Circle " + circle.getX() + " " + circle.getY() + " " + circle.getColor() +  " " + circle.getHeight() + " " + circle.getWidth();
@@ -44,6 +42,14 @@ public class Export implements CanvasElementVisitor {
     public String visitRectangle(Rectangle rectangle) {
         return "Rectangle " + rectangle.getX() + " " + rectangle.getY() + " " + rectangle.getColor() +  " "+ rectangle.getHeight() + " " + rectangle.getWidth();
     }
+
+     */
+
+    @Override
+    public String visitShape(Shape shape){
+        return shape.getClass().getSimpleName() + " " + shape.getX() + " " + shape.getY() + " " + shape.getColor() +  " "+ shape.getHeight() + " " + shape.getWidth();
+    }
+
 /*
     @Override
     public String visitTriangle(Triangle triangle) {
@@ -54,6 +60,11 @@ public class Export implements CanvasElementVisitor {
     @Override
     public String visitGroup(Compound group) {
         return "group " + group.getChildren().size() + "\n" + _visitGroup(group);
+    }
+
+    @Override
+    public String visitRectangleBorderDecorator(RectangleBorderDecorator rectangleBorderDecorator) {
+        return visitShape((Rectangle)rectangleBorderDecorator.getElement()) + " " + rectangleBorderDecorator.getBorderStyle() + " " + rectangleBorderDecorator.getBorderThickness() + " " + rectangleBorderDecorator.getBorderColor();
     }
 
     /**

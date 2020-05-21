@@ -6,6 +6,7 @@ import main.canvasElements.CanvasElement;
 import main.canvasElements.SelectionBox;
 import main.strategies.canvasElementStrategies.deselect.DeselectElementStrategy;
 import main.strategies.canvasElementStrategies.select.SelectElementStrategy;
+import main.visitor.CanvasElementVisitor;
 
 import java.util.UUID;
 
@@ -124,5 +125,10 @@ public abstract class Shape implements CanvasElement {
     @Override
     public void setSelectionBox(SelectionBox selectionBox) {
         this.selectionBox = selectionBox;
+    }
+
+    @Override
+    public String accept(CanvasElementVisitor visitor){
+        return visitor.visitShape(this);
     }
 }
