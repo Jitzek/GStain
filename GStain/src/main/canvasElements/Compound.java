@@ -348,16 +348,19 @@ public class Compound implements CanvasElement {
     @Override
     public void resize(double width, double height) {
         new ResizeCompoundStrategy().resize(getParent(), this, width, height);
+        configure_X_Y_Width_Height();
     }
 
     @Override
     public void resizeWidth(double width) {
         new ResizeCompoundStrategy().resize(getParent(), this, width, -1);
+        configure_X_Y_Width_Height();
     }
 
     @Override
     public void resizeHeight(double height) {
         new ResizeCompoundStrategy().resize(getParent(), this, -1, height);
+        configure_X_Y_Width_Height();
     }
 
     @Override
