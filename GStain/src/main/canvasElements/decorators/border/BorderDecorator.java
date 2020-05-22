@@ -5,8 +5,8 @@ import javafx.scene.shape.Path;
 import main.canvasElements.CanvasElement;
 import main.canvasElements.decorators.border.border.BorderStyle;
 import main.factories.BorderFactory;
+import main.strategies.canvasElementStrategies.draw.DrawBorderStrategy;
 import main.strategies.canvasElementStrategies.size.ResizeBorderStrategy;
-import main.visitor.CanvasElementVisitor;
 
 public abstract class BorderDecorator implements CanvasElement {
     private final CanvasElement element;
@@ -110,6 +110,12 @@ public abstract class BorderDecorator implements CanvasElement {
         getBorder().setStroke(color);
     }
 
+    @Override
+    public void draw() {
+        new DrawBorderStrategy().draw(getParent(), this);
+
+        getElement().draw();
+    }
 
     @Override
     public void remove() {

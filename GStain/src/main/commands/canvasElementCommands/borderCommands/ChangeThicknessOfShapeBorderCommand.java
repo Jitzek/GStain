@@ -28,10 +28,6 @@ public class ChangeThicknessOfShapeBorderCommand implements Command {
 
     @Override
     public void execute() {
-        // FIXME: WILL CRASH IF SHAPE DOESN'T SUPPORT BORDER
-        // TEMP FIX, UPDATE ONCE OTHER BORDERS FOR SHAPES HAVE BEEN IMPLEMENTED
-        if (!(element instanceof Rectangle || element instanceof BorderDecorator)) return;
-
         // Convert element to BorderDecorator if element is not already a BorderDecorator
         if (!(element instanceof BorderDecorator)) {
             if (conversion == null) {

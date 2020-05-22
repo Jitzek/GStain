@@ -2,11 +2,7 @@ package main.factories;
 
 import javafx.scene.paint.Color;
 import javafx.scene.shape.*;
-import main.Canvas;
 import main.canvasElements.decorators.border.border.BorderStyle;
-import main.canvasElements.shapes.Ellipse;
-import main.canvasElements.shapes.Rectangle;
-import main.canvasElements.shapes.Shape;
 
 public class BorderFactory {
     public static Path getBorder(String shape, double x, double y, double width, double height, BorderStyle style, double thickness, Color color) {
@@ -56,16 +52,21 @@ public class BorderFactory {
     private static Path getEllipseBorder(double x, double y, double width, double height, BorderStyle style, double thickness, Color color) {
         Path border = new Path();
 
-        // Start Mid Left
-        MoveTo moveTo = new MoveTo();
-        moveTo.setX(x -= width/2);
-        moveTo.setX(y -= height/2);
+        // Top Mid
+        MoveTo moveTo = new MoveTo(x, y -= height/2);
 
-        ArcTo firstHalf = new ArcTo();
-        firstHalf.setX(x += width/2);
-        firstHalf.setY(y += height/2);
+        ArcTo arcTo = new ArcTo();
+        arcTo.setX(x + 1);
+        arcTo.setY(y);
+        arcTo.setSweepFlag(false);
+        arcTo.setLargeArcFlag(true);
+        arcTo.setRadiusX(width/2);
+        arcTo.setRadiusY(height/2);
 
-        border.getElements().addAll(moveTo, firstHalf);
+        border.setStroke(color);
+        border.setStrokeWidth(thickness);
+
+        border.getElements().addAll(moveTo, arcTo, new ClosePath());
 
         return border;
     }

@@ -3,6 +3,7 @@ package main.factories;
 import main.canvasElements.CanvasElement;
 import main.canvasElements.Compound;
 import main.canvasElements.decorators.border.BorderDecorator;
+import main.canvasElements.decorators.border.EllipseBorderDecorator;
 import main.canvasElements.decorators.border.RectangleBorderDecorator;
 import main.canvasElements.shapes.Ellipse;
 import main.canvasElements.shapes.Rectangle;
@@ -24,6 +25,8 @@ public class CanvasElementCloneFactory {
                 break;
             case "RECTANGLEBORDERDECORATOR":
                 return new RectangleBorderDecorator(CanvasElementCloneFactory.getClone(((BorderDecorator) element).getElement()), ((BorderDecorator) element).getBorderStyle(), ((BorderDecorator) element).getBorderThickness(), ((BorderDecorator) element).getBorderColor());
+            case "ELLIPSEBORDERDECORATOR":
+                return new EllipseBorderDecorator(CanvasElementCloneFactory.getClone(((BorderDecorator) element).getElement()), ((BorderDecorator) element).getBorderStyle(), ((BorderDecorator) element).getBorderThickness(), ((BorderDecorator) element).getBorderColor());
         }
         return null;
     }

@@ -5,8 +5,6 @@ import javafx.scene.shape.*;
 import main.Canvas;
 import main.canvasElements.CanvasElement;
 import main.canvasElements.SelectionBox;
-import main.canvasElements.SelectionPoint;
-import main.canvasElements.SelectionPointType;
 
 public class SelectElementStrategy {
     public void select(Canvas canvas, CanvasElement element) {
