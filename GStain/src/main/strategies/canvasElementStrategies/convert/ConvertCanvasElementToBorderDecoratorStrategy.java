@@ -3,7 +3,6 @@ package main.strategies.canvasElementStrategies.convert;
 import main.Canvas;
 import main.canvasElements.CanvasElement;
 import main.canvasElements.Compound;
-import main.canvasElements.decorators.border.BorderDecorator;
 import main.canvasElements.decorators.border.EllipseBorderDecorator;
 import main.canvasElements.decorators.border.RectangleBorderDecorator;
 

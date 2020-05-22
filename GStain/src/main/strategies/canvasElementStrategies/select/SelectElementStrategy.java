@@ -1,10 +1,12 @@
 package main.strategies.canvasElementStrategies.select;
 
+import javafx.scene.layout.Border;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.*;
 import main.Canvas;
 import main.canvasElements.CanvasElement;
 import main.canvasElements.SelectionBox;
+import main.canvasElements.decorators.border.BorderDecorator;
 
 public class SelectElementStrategy {
     public void select(Canvas canvas, CanvasElement element) {
@@ -20,26 +22,31 @@ public class SelectElementStrategy {
         double x = element.getX();
         double y = element.getY();
 
+        double width = element.getWidth();
+        if (element instanceof BorderDecorator) width += ((BorderDecorator) element).getBorderThickness();
+        double height = element.getHeight();
+        if (element instanceof BorderDecorator) height += ((BorderDecorator) element).getBorderThickness();
+
         // Start Top Left
         MoveTo moveTo = new MoveTo();
-        moveTo.setX(x -= element.getWidth()/2);
-        moveTo.setY(y -= element.getHeight()/2);
+        moveTo.setX(x -= width/2);
+        moveTo.setY(y -= height/2);
 
         // Top Right
         HLineTo TR = new HLineTo();
-        TR.setX(x += element.getWidth());
+        TR.setX(x += width);
 
         // Bottom Right
         VLineTo BR = new VLineTo();
-        BR.setY(y += element.getHeight());
+        BR.setY(y += height);
 
         // Bottom Left
         HLineTo BL = new HLineTo();
-        BL.setX(x -= element.getWidth());
+        BL.setX(x -= width);
 
         // Top Left
         VLineTo TL = new VLineTo();
-        TL.setY(y -= element.getHeight());
+        TL.setY(y -= height);
 
         selectionStyle.setStroke(Color.LIGHTGREY);
         selectionStyle.setStrokeWidth(2.0f);

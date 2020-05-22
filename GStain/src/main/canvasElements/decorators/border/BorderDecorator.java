@@ -5,7 +5,9 @@ import javafx.scene.shape.Path;
 import main.canvasElements.CanvasElement;
 import main.canvasElements.decorators.border.border.BorderStyle;
 import main.factories.BorderFactory;
+import main.strategies.canvasElementStrategies.deselect.DeselectElementStrategy;
 import main.strategies.canvasElementStrategies.draw.DrawBorderStrategy;
+import main.strategies.canvasElementStrategies.select.SelectElementStrategy;
 import main.strategies.canvasElementStrategies.size.ResizeBorderStrategy;
 
 public abstract class BorderDecorator implements CanvasElement {
@@ -125,5 +127,15 @@ public abstract class BorderDecorator implements CanvasElement {
         element.getParent().getChildren().remove(border);
     }
 
+    @Override
+    public void select() {
+        setSelected(true);
+        new SelectElementStrategy().select(getParent(), this);
+    }
 
+    @Override
+    public void deselect() {
+        setSelected(false);
+        new DeselectElementStrategy().deselect(getParent(), this);
+    }
 }

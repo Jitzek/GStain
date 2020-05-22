@@ -75,7 +75,7 @@ public class EllipseBorderDecorator extends BorderDecorator {
 
     @Override
     public double getWidth() {
-        return getElement().getWidth() + getBorderThickness();
+        return getElement().getWidth();
     }
 
     @Override
@@ -85,22 +85,12 @@ public class EllipseBorderDecorator extends BorderDecorator {
 
     @Override
     public double getHeight() {
-        return getElement().getHeight() + getBorderThickness();
+        return getElement().getHeight();
     }
 
     @Override
     public void setHeight(double height) {
         getElement().setHeight(height);
-    }
-
-    @Override
-    public void select() {
-        getElement().select();
-    }
-
-    @Override
-    public void deselect() {
-        getElement().deselect();
     }
 
     @Override

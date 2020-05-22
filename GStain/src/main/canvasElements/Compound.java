@@ -2,6 +2,7 @@ package main.canvasElements;
 
 import javafx.scene.paint.Color;
 import main.Canvas;
+import main.canvasElements.decorators.border.BorderDecorator;
 import main.strategies.canvasElementStrategies.deselect.DeselectElementStrategy;
 import main.strategies.canvasElementStrategies.draw.DrawCompoundStrategy;
 import main.strategies.canvasElementStrategies.select.SelectCompoundStrategy;
@@ -43,10 +44,22 @@ public class Compound implements CanvasElement {
         double min_y = -1;
         double max_y = -1;
         for (CanvasElement child : getChildren()) {
-            if ((min_x > child.getX() - child.getWidth()/2) || min_x == -1) min_x = child.getX() - child.getWidth()/2;
-            if ((max_x < child.getX() + child.getWidth()/2) || max_x == -1) max_x = child.getX() + child.getWidth()/2;
-            if ((min_y > child.getY() - child.getHeight()/2) || min_y == -1) min_y = child.getY() - child.getHeight()/2;
-            if ((max_y < child.getY() + child.getHeight()/2) || max_y == -1) max_y = child.getY() + child.getHeight()/2;
+            if ((min_x > child.getX() - child.getWidth()/2) || min_x == -1) {
+                min_x = child.getX() - child.getWidth()/2;
+                if (child instanceof BorderDecorator) min_x -= ((BorderDecorator) child).getBorderThickness()/2;
+            }
+            if ((max_x < child.getX() + child.getWidth()/2) || max_x == -1) {
+                max_x = child.getX() + child.getWidth()/2;
+                if (child instanceof BorderDecorator) max_x += ((BorderDecorator) child).getBorderThickness()/2;
+            }
+            if ((min_y > child.getY() - child.getHeight()/2) || min_y == -1) {
+                min_y = child.getY() - child.getHeight()/2;
+                if (child instanceof BorderDecorator) min_y -= ((BorderDecorator) child).getBorderThickness()/2;
+            }
+            if ((max_y < child.getY() + child.getHeight()/2) || max_y == -1) {
+                max_y = child.getY() + child.getHeight()/2;
+                if (child instanceof BorderDecorator) max_y += ((BorderDecorator) child).getBorderThickness()/2;
+            }
         }
 
         this.width = Math.abs(max_x - min_x);
