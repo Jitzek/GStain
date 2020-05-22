@@ -6,7 +6,6 @@ import main.canvasElements.CanvasElement;
 import main.canvasElements.SelectionBox;
 import main.canvasElements.decorators.border.border.BorderStyle;
 import main.strategies.canvasElementStrategies.deselect.DeselectElementStrategy;
-import main.strategies.canvasElementStrategies.draw.DrawBorderStrategy;
 import main.strategies.canvasElementStrategies.select.SelectElementStrategy;
 import main.visitor.CanvasElementVisitor;
 
@@ -146,13 +145,6 @@ public class RectangleBorderDecorator extends BorderDecorator {
     @Override
     public void recolor(Color color) {
         getElement().recolor(color);
-    }
-
-    @Override
-    public void draw() {
-        new DrawBorderStrategy().draw(getParent(), this);
-
-        getElement().draw();
     }
 
     @Override

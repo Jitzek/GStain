@@ -4,7 +4,6 @@ import javafx.scene.paint.Color;
 import main.Canvas;
 import main.strategies.canvasElementStrategies.draw.DrawRectangleStrategy;
 import main.strategies.canvasElementStrategies.size.ResizeRectangleStrategy;
-import main.visitor.CanvasElementVisitor;
 
 public class Rectangle extends Shape {
     private javafx.scene.shape.Rectangle rectangle;

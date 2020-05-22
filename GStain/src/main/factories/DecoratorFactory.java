@@ -2,6 +2,7 @@ package main.factories;
 
 import main.canvasElements.CanvasElement;
 import main.canvasElements.decorators.border.BorderDecorator;
+import main.canvasElements.decorators.border.EllipseBorderDecorator;
 import main.canvasElements.decorators.border.RectangleBorderDecorator;
 
 public class DecoratorFactory {
@@ -12,7 +13,7 @@ public class DecoratorFactory {
                     case "RECTANGLE":
                         return new RectangleBorderDecorator(element);
                     case "ELLIPSE":
-                        break;
+                        return new EllipseBorderDecorator(element);
                     case "TRIANGLE":
                         break;
                 }
