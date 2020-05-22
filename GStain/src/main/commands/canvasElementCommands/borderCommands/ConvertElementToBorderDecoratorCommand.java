@@ -39,7 +39,6 @@ public class ConvertElementToBorderDecoratorCommand implements Command {
 
     @Override
     public void redo() {
-        // FIXME Converted element != original Converted element (execute makes new BorderDecorator instance)
         execute();
     }
 }

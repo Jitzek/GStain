@@ -77,7 +77,7 @@ public class RectangleBorderDecorator extends BorderDecorator {
 
     @Override
     public double getWidth() {
-        return getElement().getWidth() + getBorderThickness();
+        return getElement().getWidth();
     }
 
     @Override
@@ -87,24 +87,12 @@ public class RectangleBorderDecorator extends BorderDecorator {
 
     @Override
     public double getHeight() {
-        return getElement().getHeight() + getBorderThickness();
+        return getElement().getHeight();
     }
 
     @Override
     public void setHeight(double height) {
         getElement().setHeight(height);
-    }
-
-    @Override
-    public void select() {
-        setSelected(true);
-        new SelectElementStrategy().select(getParent(), this);
-    }
-
-    @Override
-    public void deselect() {
-        setSelected(false);
-        new DeselectElementStrategy().deselect(getParent(), this);
     }
 
     @Override
