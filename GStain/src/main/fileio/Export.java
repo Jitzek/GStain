@@ -4,6 +4,7 @@ import main.Canvas;
 import main.canvasElements.CanvasElement;
 import main.canvasElements.Compound;
 import main.canvasElements.decorators.border.BorderDecorator;
+import main.canvasElements.decorators.border.EllipseBorderDecorator;
 import main.canvasElements.decorators.border.RectangleBorderDecorator;
 import main.canvasElements.shapes.Ellipse;
 import main.canvasElements.shapes.Rectangle;
@@ -65,6 +66,11 @@ public class Export implements CanvasElementVisitor {
     @Override
     public String visitRectangleBorderDecorator(RectangleBorderDecorator rectangleBorderDecorator) {
         return visitShape((Rectangle)rectangleBorderDecorator.getElement()) + " " + rectangleBorderDecorator.getBorderStyle() + " " + rectangleBorderDecorator.getBorderThickness() + " " + rectangleBorderDecorator.getBorderColor();
+    }
+
+    @Override
+    public String visitEllipseBorderDecorator(EllipseBorderDecorator ellipseBorderDecorator) {
+        return visitShape((Ellipse)ellipseBorderDecorator.getElement()) + " " + ellipseBorderDecorator.getBorderStyle() + " " + ellipseBorderDecorator.getBorderThickness() + " " + ellipseBorderDecorator.getBorderColor();
     }
 
     /**

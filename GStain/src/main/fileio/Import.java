@@ -7,6 +7,7 @@ import javafx.stage.Stage;
 import main.Canvas;
 import main.canvasElements.CanvasElement;
 import main.canvasElements.Compound;
+import main.canvasElements.decorators.border.EllipseBorderDecorator;
 import main.canvasElements.decorators.border.RectangleBorderDecorator;
 import main.canvasElements.decorators.border.border.BorderStyle;
 import main.canvasElements.shapes.Ellipse;
@@ -57,12 +58,15 @@ public class Import {
                     }else{
                         canvasElements.add(rectangle);
                     }
-
-
                     break;
-                case "circle":
-                    Ellipse circle = new Ellipse(canvas, Double.parseDouble(getInfo(indexer.get(currentline))[1]), Double.parseDouble(getInfo(indexer.get(currentline))[2]), Color.web(getInfo(indexer.get(currentline))[3]), Double.parseDouble(getInfo(indexer.get(currentline))[4]), Double.parseDouble(getInfo(indexer.get(currentline))[5]));
-                    canvasElements.add(circle);
+                case "ellipse":
+                    Ellipse ellipse = new Ellipse(canvas, Double.parseDouble(getInfo(indexer.get(currentline))[1]), Double.parseDouble(getInfo(indexer.get(currentline))[2]), Color.web(getInfo(indexer.get(currentline))[3]), Double.parseDouble(getInfo(indexer.get(currentline))[4]), Double.parseDouble(getInfo(indexer.get(currentline))[5]));
+                    if(getInfo(indexer.get(currentline)).length > 6){
+                        EllipseBorderDecorator ellipseBorderDecorator = new EllipseBorderDecorator(ellipse, convertStringtoBorderStyle(getInfo(indexer.get(currentline))[6]), Double.parseDouble(getInfo(indexer.get(currentline))[7]), Color.web(getInfo(indexer.get(currentline))[8]));
+                        canvasElements.add(ellipseBorderDecorator);
+                    }else{
+                        canvasElements.add(ellipse);
+                    }
                     break;
                 case "triangle":
                     //Triangle triangle = new Triangle(Double.parseDouble(getInfo(indexer.get(currentline))[1]), Double.parseDouble(getInfo(indexer.get(currentline))[2]), Color.BLACK, Double.parseDouble(getInfo(indexer.get(currentline))[4]), Double.parseDouble(getInfo(indexer.get(currentline))[5]));
@@ -77,7 +81,8 @@ public class Import {
         arr[0] = fixedType;
         return arr;
     }
-
+    //FixMe
+    //set dialog in model
     private String fillIndexer(){
         try{
             FileChooser fileChooser = new FileChooser();

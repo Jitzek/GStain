@@ -146,8 +146,8 @@ public class EllipseBorderDecorator extends BorderDecorator {
     }
 
     @Override
-    public String accept(CanvasElementVisitor canvasElementVisitor) {
-        return null;
+    public String accept(CanvasElementVisitor visitor){
+        return visitor.visitEllipseBorderDecorator(this);
     }
 
     @Override
