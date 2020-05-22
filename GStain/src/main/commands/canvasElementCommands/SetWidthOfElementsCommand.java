@@ -2,9 +2,7 @@ package main.commands.canvasElementCommands;
 
 import main.canvasElements.CanvasElement;
 import main.canvasElements.Compound;
-import main.canvasElements.shapes.Shape;
 import main.commands.Command;
-import main.strategies.canvasElementStrategies.size.ResizeElementStrategy;
 
 import java.util.ArrayList;
 

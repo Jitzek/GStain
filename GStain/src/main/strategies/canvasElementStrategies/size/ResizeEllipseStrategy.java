@@ -1,9 +1,8 @@
 package main.strategies.canvasElementStrategies.size;
 
-import javafx.scene.shape.Ellipse;
 import main.Canvas;
 import main.canvasElements.CanvasElement;
-import main.canvasElements.shapes.Rectangle;
+import main.canvasElements.shapes.Ellipse;
 
 public class ResizeEllipseStrategy implements ResizeElementStrategy {
     @Override
@@ -13,15 +12,13 @@ public class ResizeEllipseStrategy implements ResizeElementStrategy {
         element.setWidth(width);
         element.setHeight(height);
 
-        // Draw Ellipse logic (Paint on GUI)
-        // TODO find way to change size of existing shape instead of replacing it
-        Ellipse ellipse = new javafx.scene.shape.Ellipse(element.getX(), element.getY(), element.getWidth() / 2, element.getHeight() / 2);
+        // Draw Rectangle logic (Paint on GUI)
+        javafx.scene.shape.Ellipse ellipse = new javafx.scene.shape.Ellipse(element.getX(), element.getY(), element.getWidth() / 2, element.getHeight() / 2);
         ellipse.setFill(element.getColor());
 
-        canvas.getChildren().set(canvas.getIndexOfElement(element, true), ellipse);
+        canvas.getChildren().set(canvas.getChildren().indexOf(((Ellipse) element).getEllipse()), ellipse);
 
-        // Store Drawn Ellipse into it's container
-        ((main.canvasElements.shapes.Ellipse) element).setEllipse(ellipse);
+        ((Ellipse) element).setEllipse(ellipse);
 
         element.select();
     }
