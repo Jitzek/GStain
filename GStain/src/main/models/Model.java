@@ -439,7 +439,7 @@ public class Model {
     public void exportAs(){
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Save as");
-        fileChooser.setInitialFileName("Default");
+        fileChooser.setInitialFileName(canvas.getName());
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("gurbe Files", "*.gurbe"));
         try {
             File file = fileChooser.showSaveDialog(stage);
