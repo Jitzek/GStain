@@ -22,6 +22,7 @@ import main.commands.canvasElementCommands.borderCommands.ChangeColorOfBordersCo
 import main.commands.canvasElementCommands.borderCommands.ChangeThicknessOfBordersCommand;
 import main.commands.canvasElementCommands.compoundCommands.ConvertToCompoundCommand;
 import main.commands.canvasElementCommands.compoundCommands.ConvertToElementsCommand;
+import main.dialogs.OpenFileDialog;
 import main.eventHandlers.MouseDraggedOnCanvasEventHandler;
 import main.eventHandlers.MousePressedOnCanvasEventHandler;
 import main.eventHandlers.MouseReleasedOnCanvasEventHandler;
@@ -91,7 +92,7 @@ public class Model {
         getToolModel().setTool(ToolType.POINTER);
     }
 
-    public void createSelectionBox(){
+    public void createSelectionArea(){
         SelectionArea selectionArea = SelectionArea.getSelectionArea();
         canvas.getChildren().add(selectionArea.getPath());
     }
@@ -386,8 +387,19 @@ public class Model {
     }
 
     public void importGurbe(StackPane canvasHolder){
-        Import anImport = new Import(canvas, stage, this);
-        filepath = anImport.getFilename();
+        OpenFileDialog openFileDialog = new OpenFileDialog(this);
+        File file = openFileDialog.OpenFile();
+        if(file == null){
+            System.out.println("No file selected");
+        }
+        else{
+            Import anImport = new Import(canvas,this, file);
+            anImport.createCanvas();
+            createSelectionArea();
+            anImport.traverseGroup(canvas.getCanvasElements());
+            anImport.drawAll();
+            filepath = anImport.getFilename();
+        }
     }
 
     /**
@@ -427,7 +439,7 @@ public class Model {
     public void exportAs(){
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Save as");
-        fileChooser.setInitialFileName("Default");
+        fileChooser.setInitialFileName(canvas.getName());
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("gurbe Files", "*.gurbe"));
         try {
             File file = fileChooser.showSaveDialog(stage);
