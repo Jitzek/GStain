@@ -1,6 +1,5 @@
 package main.commands.canvasElementCommands.borderCommands;
 
-import main.CC;
 import main.Canvas;
 import main.canvasElements.CanvasElement;
 import main.canvasElements.Compound;
@@ -74,7 +73,8 @@ public class ChangeThicknessOfCompoundBorderCommand implements Command {
         for (Command conversion : conversions) conversion.undo();
 
         if (parent instanceof Compound) compound = (Compound) ((Compound) parent).getChildren().get(index);
-        else if (parent instanceof Canvas) compound = (Compound) ((Canvas) parent).getCanvasElementAt(index, false, false);
+        else if (parent instanceof Canvas) compound = (Compound) ((Canvas) parent).getCanvasElements().get(index);
+        //else if (parent instanceof Canvas) compound = (Compound) ((Canvas) parent).getCanvasElementAt(index, false, false);
         else System.out.println("Invalid Parent instance: " + parent.getClass().getSimpleName());
     }
 

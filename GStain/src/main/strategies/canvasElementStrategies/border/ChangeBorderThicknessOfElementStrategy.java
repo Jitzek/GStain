@@ -9,7 +9,7 @@ public class ChangeBorderThicknessOfElementStrategy {
         // Handle given element is Compound
         if (element instanceof Compound) new ChangeBorderThicknessOfCompoundStrategy().changeThickness((Compound) element, thickness);
 
-        // Handle give element is not a BorderDecorator
+        // Handle given element is not a BorderDecorator
         if (!(element instanceof BorderDecorator)) return;
 
         // Change thickness of element
