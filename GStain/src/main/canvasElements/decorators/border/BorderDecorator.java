@@ -4,9 +4,8 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Path;
 import main.canvasElements.CanvasElement;
 import main.canvasElements.decorators.border.border.BorderStyle;
-import main.factories.BorderFactory;
 import main.strategies.canvasElementStrategies.deselect.DeselectElementStrategy;
-import main.strategies.canvasElementStrategies.draw.DrawBorderStrategy;
+import main.strategies.canvasElementStrategies.draw.DrawBorderDecoratorStrategy;
 import main.strategies.canvasElementStrategies.select.SelectElementStrategy;
 import main.strategies.canvasElementStrategies.size.ResizeBorderStrategy;
 
@@ -19,7 +18,7 @@ public abstract class BorderDecorator implements CanvasElement {
 
     public BorderDecorator(CanvasElement element) {
         this.element = element;
-        setBorder(BorderFactory.getBorder(
+        /*setBorder(BorderFactory.getBorder(
                 element.getClass().getSimpleName().toUpperCase(),
                 element.getX(),
                 element.getY(),
@@ -27,7 +26,7 @@ public abstract class BorderDecorator implements CanvasElement {
                 element.getHeight(),
                 getBorderStyle(),
                 getBorderThickness(),
-                getBorderColor()));
+                getBorderColor()));*/
     }
 
     public BorderDecorator(CanvasElement element, BorderStyle borderStyle, double borderThickness, Color borderColor) {
@@ -35,7 +34,7 @@ public abstract class BorderDecorator implements CanvasElement {
         this.borderStyle = borderStyle;
         this.borderThickness = borderThickness;
         this.borderColor = borderColor;
-        setBorder(BorderFactory.getBorder(
+        /*setBorder(BorderFactory.getBorder(
                 element.getClass().getSimpleName().toUpperCase(),
                 element.getX(),
                 element.getY(),
@@ -43,7 +42,7 @@ public abstract class BorderDecorator implements CanvasElement {
                 element.getHeight(),
                 getBorderStyle(),
                 getBorderThickness(),
-                getBorderColor()));
+                getBorderColor()));*/
     }
 
     public CanvasElement getElement() {
@@ -114,9 +113,9 @@ public abstract class BorderDecorator implements CanvasElement {
 
     @Override
     public void draw() {
-        new DrawBorderStrategy().draw(getParent(), this);
+        new DrawBorderDecoratorStrategy().draw(getParent(), this);
 
-        getElement().draw();
+        //getElement().draw();
     }
 
     @Override

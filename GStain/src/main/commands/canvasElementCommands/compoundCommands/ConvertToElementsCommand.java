@@ -24,10 +24,12 @@ public class ConvertToElementsCommand implements Command {
 
     @Override
     public void execute() {
+        elements.clear();
         for (Compound compound : compounds) {
             new RemoveElementStrategy().remove(canvas, compound);
             for (CanvasElement element : new ArrayList<>(compound.getChildren())) {
                 element.draw();
+                canvas.addCanvasElement(element);
                 elements.add(element);
             }
         }
