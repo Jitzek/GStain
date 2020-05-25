@@ -2,7 +2,7 @@
 Simple Paint program made to be expanded upon by implementing useful design patterns
 
 
-Version "0.2"
+Version "0.3"
 
 Project SDK:  Java "11.0.6"
 
